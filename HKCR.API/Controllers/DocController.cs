@@ -1,5 +1,7 @@
-﻿using HKCR.Application.Common.DTO.Document;
+﻿using HKCR.Application.Common.DTO;
+using HKCR.Application.Common.DTO.Document;
 using HKCR.Application.Common.Interface;
+using HKCR.Infra.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HKCR.API.Controllers;
@@ -12,6 +14,14 @@ public class DocController : ControllerBase
     public DocController(IDocDetails docDetails)
     {
         _docDetails = docDetails;
+    }
+
+    [HttpGet]
+    [Route("/api/v1/docs")]
+    public async Task<List<DocResponseDto>> GetAllDocDetails()
+    {
+        var data = await _docDetails.GetAllDocsAsync();
+        return data;
     }
 
     [HttpPost]
