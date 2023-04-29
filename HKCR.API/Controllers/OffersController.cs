@@ -26,9 +26,9 @@ namespace HKCR.API.Controllers
 
         [HttpPost]
         [Route("/api/v1/offers")]
-        public async Task<OffersResponseDto> AddOffersDetails(OffersRequestDto car)
+        public async Task<OffersResponseDto> AddOffersDetails(OffersRequestDto offers)
         {
-            var data = await _offersDetails.AddOffersDetails(car);
+            var data = await _offersDetails.AddOffersDetails(offers);
             return data;
         }
     }
