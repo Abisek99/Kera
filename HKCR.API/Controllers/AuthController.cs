@@ -1,5 +1,6 @@
 ﻿using HKCR.Application.Common.DTO;
 using HKCR.Application.Common.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HKCR.API.Controllers;
@@ -19,6 +20,23 @@ public class AuthController : ControllerBase
     public async Task<ResponseDto> Register([FromBody] UserRegisterRequestDto model)
     {
         var result = await _authenticationManager.Register(model);
+        return result;
+    }
+
+    [HttpGet]
+    [Route("/api/authenticate/getUserDetails")]
+    public async Task<IEnumerable<UserDetailsDto>> GetUserDetails()
+    {
+        var result = await _authenticationManager.GetUserDetails();
+        return result;
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [Route("/api/authenticate/login")]
+    public async Task<ResponseDto> Login([FromBody] UserLoginRequestDto user)
+    {
+        var result = await _authenticationManager.Login(user);
         return result;
     }
 }
