@@ -3,6 +3,7 @@ using System;
 using HKCR.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230429082933_rental")]
+    partial class rental
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,44 +88,6 @@ namespace HKCR.Infra.Migrations
                     b.ToTable("Customer");
                 });
 
-
-
-            modelBuilder.Entity("HKCR.Domain.Entities.DamageRequest", b =>
-                {
-                    b.Property<Guid>("DamageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("DamageDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DamageDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("DamageStatus")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("RentalId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("RepairBill")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DamageId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("RentalId");
-
-                    b.ToTable("DamageRequest");
-                });
-
-
             modelBuilder.Entity("HKCR.Domain.Entities.Document", b =>
                 {
                     b.Property<Guid>("DocID")
@@ -141,64 +105,6 @@ namespace HKCR.Infra.Migrations
 
                     b.ToTable("Document");
                 });
-
-            modelBuilder.Entity("HKCR.Domain.Entities.Offers", b =>
-                {
-                    b.Property<Guid>("OfferID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("OfferAmount")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("OfferName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("OfferType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("OfferID");
-
-                    b.ToTable("Offers");
-});
-
-            modelBuilder.Entity("HKCR.Domain.Entities.Payment", b =>
-                {
-                    b.Property<Guid>("PaymentID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("OfferID")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("PaymentTotal")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("RentalID")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("PaymentID");
-
-                    b.HasIndex("OfferID");
-
-                    b.HasIndex("RentalID");
-
-                    b.ToTable("Payment");
-                });
-
 
             modelBuilder.Entity("HKCR.Domain.Entities.Rental", b =>
                 {
@@ -448,17 +354,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1c6b70c9-934a-4adf-b63d-27cae6237184",
-
+                            ConcurrencyStamp = "7f4bd149-1395-4c18-b78f-abcf3608fec0",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECjJ5dihrwEYRrNet7ZaBVrdiXd66lHU7VVEo2hM7ZQAI/IhTJCuJsYB0OPnltD5Sg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENHqoHvTi9t/3ea+6ANfWz827XSBeQ9TvgEHwjQxg++7YX3YH7qNKRvxK6/eFHxIRg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ed4deb00-7e21-45f4-bdb0-0655609a42b5",
-
+                            SecurityStamp = "1a7bab34-b74e-4ace-a690-9d61dada3a38",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });
@@ -561,36 +465,6 @@ namespace HKCR.Infra.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("HKCR.Domain.Entities.Payment", b =>
-                {
-                    b.HasOne("HKCR.Domain.Entities.Offers", "Offers")
-                        .WithMany()
-                        .HasForeignKey("OfferID")
-
-            modelBuilder.Entity("HKCR.Domain.Entities.DamageRequest", b =>
-                {
-                    b.HasOne("HKCR.Domain.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.HasOne("HKCR.Domain.Entities.Rental", "Rental")
-                        .WithMany()
-                        .HasForeignKey("RentalID")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("Offers");
-                        .HasForeignKey("RentalId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Rental");
                 });
 
             modelBuilder.Entity("HKCR.Domain.Entities.Rental", b =>
