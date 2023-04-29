@@ -2,7 +2,6 @@
 using HKCR.Application.Common.DTO.DamageRequest;
 using HKCR.Application.Common.Interface;
 using HKCR.Domain.Entities;
-using HKCR.Infra.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

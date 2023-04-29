@@ -47,14 +47,60 @@ namespace HKCR.Infra.Services
             return result;
         }
 
-        public Task<List<CarResponseDto>> GetAllCars()
+        // Update car last rented date
+        public Task<CarResponseDto> UpdateCarLastRentedDetails(CarRequestDto car)
         {
             throw new NotImplementedException();
         }
 
+        public Task<List<CarResponseDto>> GetAllCars()
+        {
+            var data = (from empData in _dbContext.Cars
+                select new CarResponseDto()
+                {
+                    CarID = empData.CarID,
+                    CarName = empData.CarName,
+                    CarBrand = empData.CarBrand,
+                    CarModel = empData.CarModel,
+                    CarColor = empData.CarColor,
+                    CarRentalRate = empData.CarRentalRate,
+                    CarAvailability = empData.CarAvailability,
+                    CarNoOfRent = empData.CarNoOfRent,
+                    CarLastRented = empData.CarLastRented,
+                    CarImage = empData.CarImage
+                }).ToList();
+            return Task.FromResult(data);
+        }
+
         public Task<List<CarResponseDto>> GetAllCarsAsync()
         {
-            throw new NotImplementedException();
+            var data = (from empData in _dbContext.Cars
+                select new CarResponseDto()
+                {
+                    CarID = empData.CarID,
+                    CarName = empData.CarName,
+                    CarBrand = empData.CarBrand,
+                    CarModel = empData.CarModel,
+                    CarColor = empData.CarColor,
+                    CarRentalRate = empData.CarRentalRate,
+                    CarAvailability = empData.CarAvailability,
+                    CarNoOfRent = empData.CarNoOfRent,
+                    CarLastRented = empData.CarLastRented,
+                    CarImage = empData.CarImage
+                }).ToList();
+
+
+            // join depart in _dbContext.Department
+            //     on empData.DepartmentId equals depart.Id
+            // select new EmployeeResponseDTO()
+            // {
+            //     DepartmentName = depart.Name,
+            //     Designation = empData.Designation,
+            //     Salary = empData.Salary
+            // }).ToList();
+
+
+            return Task.FromResult(data);
         }
     }
 }

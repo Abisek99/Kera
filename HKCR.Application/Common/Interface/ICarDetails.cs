@@ -12,5 +12,6 @@ namespace HKCR.Application.Common.Interface
         Task<List<CarResponseDto>> GetAllCarsAsync();
         Task<List<CarResponseDto>> GetAllCars();
         Task<CarResponseDto> AddCarDetails(CarRequestDto car);
+        Task<CarResponseDto> UpdateCarLastRentedDetails(CarRequestDto car);
     }
 }

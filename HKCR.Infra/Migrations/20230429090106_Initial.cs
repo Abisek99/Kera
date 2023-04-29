@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HKCR.Infra.Migrations
 {
-    public partial class Car : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -80,6 +80,33 @@ namespace HKCR.Infra.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Document", x => x.DocID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Offers",
+                columns: table => new
+                {
+                    OfferID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OfferName = table.Column<string>(type: "text", nullable: false),
+                    OfferType = table.Column<string>(type: "text", nullable: false),
+                    OfferAmount = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offers", x => x.OfferID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Staff",
+                columns: table => new
+                {
+                    StaffID = table.Column<Guid>(type: "uuid", nullable: false),
+                    StaffEmail = table.Column<string>(type: "text", nullable: false),
+                    StaffPassword = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staff", x => x.StaffID);
                 });
 
             migrationBuilder.CreateTable(
@@ -219,6 +246,119 @@ namespace HKCR.Infra.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Customer",
+                columns: table => new
+                {
+                    CustomerID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomerDiscount = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customer", x => x.CustomerID);
+                    table.ForeignKey(
+                        name: "FK_Customer_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rental",
+                columns: table => new
+                {
+                    RentalID = table.Column<Guid>(type: "uuid", nullable: false),
+                    RentalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RentalStatus = table.Column<string>(type: "text", nullable: false),
+                    DamageStatus = table.Column<string>(type: "text", nullable: false),
+                    CarID = table.Column<Guid>(type: "uuid", nullable: false),
+                    StaffID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomerID = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rental", x => x.RentalID);
+                    table.ForeignKey(
+                        name: "FK_Rental_Cars_CarID",
+                        column: x => x.CarID,
+                        principalTable: "Cars",
+                        principalColumn: "CarID",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Rental_Customer_CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "Customer",
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Rental_Staff_StaffID",
+                        column: x => x.StaffID,
+                        principalTable: "Staff",
+                        principalColumn: "StaffID",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DamageRequest",
+                columns: table => new
+                {
+                    DamageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DamageDescription = table.Column<string>(type: "text", nullable: false),
+                    DamageDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DamageStatus = table.Column<string>(type: "text", nullable: false),
+                    RepairBill = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RentalId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DamageRequest", x => x.DamageId);
+                    table.ForeignKey(
+                        name: "FK_DamageRequest_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_DamageRequest_Rental_RentalId",
+                        column: x => x.RentalId,
+                        principalTable: "Rental",
+                        principalColumn: "RentalID",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payment",
+                columns: table => new
+                {
+                    PaymentID = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentType = table.Column<string>(type: "text", nullable: false),
+                    PaymentTotal = table.Column<int>(type: "integer", nullable: false),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RentalID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OfferID = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payment", x => x.PaymentID);
+                    table.ForeignKey(
+                        name: "FK_Payment_Offers_OfferID",
+                        column: x => x.OfferID,
+                        principalTable: "Offers",
+                        principalColumn: "OfferID",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Payment_Rental_RentalID",
+                        column: x => x.RentalID,
+                        principalTable: "Rental",
+                        principalColumn: "RentalID",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -227,7 +367,7 @@ namespace HKCR.Infra.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "7b7d8660-c226-4835-9d24-1ca2f9ad96a9", "admin@hajur.com", true, false, null, "ADMIN@HAJUR.COM", "HAJUR KO ADMIN", "AQAAAAEAACcQAAAAEDs5Wl7sKMHjVefEuILtM/uA0dnMOhzH8em1O6UsyI+yKTDDxjclhHpX06FFcI+R0A==", null, false, "2c6ca453-97c1-4a4a-a61f-d9ca9a10fda0", false, "Hajur Ko Admin" });
+                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "84835d1e-89d6-4836-88d3-903808375d60", "admin@hajur.com", true, false, null, "ADMIN@HAJUR.COM", "HAJUR KO ADMIN", "AQAAAAEAACcQAAAAEPGR4GMk2y4IoPNWmhye+xStvkLtGq3mm0jcJwO/FedeTCdYvp50aw8yTPBmiANBdw==", null, false, "2b64e57d-2f1e-4946-9f57-39ff4d3de047", false, "Hajur Ko Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -272,6 +412,46 @@ namespace HKCR.Infra.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Customer_UserId",
+                table: "Customer",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DamageRequest_CustomerId",
+                table: "DamageRequest",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DamageRequest_RentalId",
+                table: "DamageRequest",
+                column: "RentalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_OfferID",
+                table: "Payment",
+                column: "OfferID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_RentalID",
+                table: "Payment",
+                column: "RentalID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rental_CarID",
+                table: "Rental",
+                column: "CarID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rental_CustomerID",
+                table: "Rental",
+                column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rental_StaffID",
+                table: "Rental",
+                column: "StaffID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_DocId",
                 table: "User",
                 column: "DocId");
@@ -295,16 +475,34 @@ namespace HKCR.Infra.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cars");
+                name: "DamageRequest");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Payment");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Offers");
+
+            migrationBuilder.DropTable(
+                name: "Rental");
+
+            migrationBuilder.DropTable(
+                name: "Cars");
+
+            migrationBuilder.DropTable(
+                name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "Staff");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Document");

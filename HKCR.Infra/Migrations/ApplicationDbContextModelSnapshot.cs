@@ -86,8 +86,6 @@ namespace HKCR.Infra.Migrations
                     b.ToTable("Customer");
                 });
 
-
-
             modelBuilder.Entity("HKCR.Domain.Entities.DamageRequest", b =>
                 {
                     b.Property<Guid>("DamageId")
@@ -122,7 +120,6 @@ namespace HKCR.Infra.Migrations
 
                     b.ToTable("DamageRequest");
                 });
-
 
             modelBuilder.Entity("HKCR.Domain.Entities.Document", b =>
                 {
@@ -163,7 +160,7 @@ namespace HKCR.Infra.Migrations
                     b.HasKey("OfferID");
 
                     b.ToTable("Offers");
-});
+                });
 
             modelBuilder.Entity("HKCR.Domain.Entities.Payment", b =>
                 {
@@ -198,7 +195,6 @@ namespace HKCR.Infra.Migrations
 
                     b.ToTable("Payment");
                 });
-
 
             modelBuilder.Entity("HKCR.Domain.Entities.Rental", b =>
                 {
@@ -448,17 +444,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1c6b70c9-934a-4adf-b63d-27cae6237184",
-
+                            ConcurrencyStamp = "84835d1e-89d6-4836-88d3-903808375d60",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECjJ5dihrwEYRrNet7ZaBVrdiXd66lHU7VVEo2hM7ZQAI/IhTJCuJsYB0OPnltD5Sg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPGR4GMk2y4IoPNWmhye+xStvkLtGq3mm0jcJwO/FedeTCdYvp50aw8yTPBmiANBdw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ed4deb00-7e21-45f4-bdb0-0655609a42b5",
-
+                            SecurityStamp = "2b64e57d-2f1e-4946-9f57-39ff4d3de047",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });
@@ -563,12 +557,6 @@ namespace HKCR.Infra.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("HKCR.Domain.Entities.Payment", b =>
-                {
-                    b.HasOne("HKCR.Domain.Entities.Offers", "Offers")
-                        .WithMany()
-                        .HasForeignKey("OfferID")
-
             modelBuilder.Entity("HKCR.Domain.Entities.DamageRequest", b =>
                 {
                     b.HasOne("HKCR.Domain.Entities.Customer", "Customer")
@@ -579,16 +567,30 @@ namespace HKCR.Infra.Migrations
 
                     b.HasOne("HKCR.Domain.Entities.Rental", "Rental")
                         .WithMany()
-                        .HasForeignKey("RentalID")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("Offers");
                         .HasForeignKey("RentalId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Customer");
+
+                    b.Navigation("Rental");
+                });
+
+            modelBuilder.Entity("HKCR.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("HKCR.Domain.Entities.Offers", "Offers")
+                        .WithMany()
+                        .HasForeignKey("OfferID")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("HKCR.Domain.Entities.Rental", "Rental")
+                        .WithMany()
+                        .HasForeignKey("RentalID")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Offers");
 
                     b.Navigation("Rental");
                 });

@@ -8,19 +8,18 @@ namespace HKCR.API.Controllers
     public class CarController : ControllerBase
     {
         private readonly ICarDetails _carDetails;
-
         public CarController(ICarDetails carDetails)
         {
             _carDetails = carDetails;
         }
-        // [HttpPost]
-        // [Route("/api/v1/cars")]
-        // public async Task<ResponseDto> AddCarDetails([FromBody] CarRequestDto model)
-        // {
-        //     var result = await AddCarDetails(model);
-        //     return result;
-        // }
 
+        [HttpGet]
+        [Route("/api/v1/cars")]
+        public async Task<List<CarResponseDto>> GetAllCarDetails()
+        {
+            var data = await _carDetails.GetAllCarsAsync();
+            return data;
+        }
 
         [HttpPost]
         [Route("/api/v1/cars")]
