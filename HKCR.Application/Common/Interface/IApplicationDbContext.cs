@@ -15,7 +15,5 @@ public interface IApplicationDbContext
 
     DbSet<Payment> Payment { get; set; }
 
-    // DbSet<Department> Department { get; set; }
-    // DbSet<SalaryOrBonus> SalaryOrBonus { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

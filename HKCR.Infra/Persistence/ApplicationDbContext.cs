@@ -48,6 +48,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
 
         return result;
     }
+    
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -99,8 +100,6 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
             .WithMany()
             .HasForeignKey(u => u.RentalId)
             .OnDelete(DeleteBehavior.SetNull);
-
-
 
 
         // Configure the foreign key between Payment and Offer entities

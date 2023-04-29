@@ -1,4 +1,5 @@
 ﻿using HKCR.Application.Common.DTO;
+using HKCR.Application.Common.DTO.Car;
 using HKCR.Application.Common.Interface;
 using HKCR.Domain.Entities;
 
@@ -14,6 +15,7 @@ namespace HKCR.Infra.Services
             _dbContext = dbContext;
         }
 
+        // Add Car
         public async Task<CarResponseDto> AddCarDetails(CarRequestDto car)
         {
             var carDetails = new Cars()
@@ -24,7 +26,7 @@ namespace HKCR.Infra.Services
                 CarColor = car.CarColor,
                 CarLastRented = car.CarLastRented,
                 CarModel = car.CarModel,
-                CarRentalRate = car.CarRentalRate,
+                CarRentalRate = car.CarRentalRate ?? "",
                 CarNoOfRent = car.CarNoOfRent,
                 CarImage = car.CarImage
             };
@@ -47,10 +49,59 @@ namespace HKCR.Infra.Services
             return result;
         }
 
-        // Update car last rented date
-        public Task<CarResponseDto> UpdateCarLastRentedDetails(CarRequestDto car)
+        // Update car
+        public async Task<CarResponseDto> UpdateCarDetails(Guid id, UpdateCarRequestDto car)
         {
-            throw new NotImplementedException();
+            var data = await _dbContext.Cars.FindAsync(id);
+            if (data != null)
+            {
+                data.CarName = car.CarName;
+                data.CarBrand = car.CarBrand;
+                data.CarAvailability = car.CarAvailability;
+                data.CarColor = car.CarColor;
+                data.CarLastRented = car.CarLastRented;
+                data.CarModel = car.CarModel;
+                data.CarRentalRate = car.CarRentalRate;
+                data.CarNoOfRent = car.CarNoOfRent;
+                data.CarImage = car.CarImage;
+            }
+
+            await _dbContext.SaveChangesAsync(default(CancellationToken));
+            var result = new CarResponseDto()
+            {
+                CarName = data.CarName,
+                CarBrand = data.CarBrand,
+                CarAvailability = data.CarAvailability,
+                CarColor = data.CarColor,
+                CarLastRented = data.CarLastRented,
+                CarModel = data.CarModel,
+                CarRentalRate = data.CarRentalRate,
+                CarNoOfRent = data.CarNoOfRent,
+                CarImage = data.CarImage
+            };
+            return result;
+        }
+
+
+        // Get Single Car
+        public Task<List<CarResponseDto>> GetSingleCarAsync(Guid prodId)
+        {
+            var data = (from empData in _dbContext.Cars
+                where empData.CarID.Equals(prodId)
+                select new CarResponseDto()
+                {
+                    CarID = empData.CarID,
+                    CarName = empData.CarName,
+                    CarBrand = empData.CarBrand,
+                    CarModel = empData.CarModel,
+                    CarColor = empData.CarColor,
+                    CarRentalRate = empData.CarRentalRate,
+                    CarAvailability = empData.CarAvailability,
+                    CarNoOfRent = empData.CarNoOfRent,
+                    CarLastRented = empData.CarLastRented,
+                    CarImage = empData.CarImage
+                }).ToList();
+            return Task.FromResult(data);
         }
 
         public Task<List<CarResponseDto>> GetAllCars()
