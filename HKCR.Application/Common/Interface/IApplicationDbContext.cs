@@ -9,6 +9,8 @@ public interface IApplicationDbContext
     DbSet<Cars> Cars { get; set; }
     DbSet<Document> Document { get; set; }
 
+    DbSet<Payment> Payment { get; set; }
+
     // DbSet<Department> Department { get; set; }
     // DbSet<SalaryOrBonus> SalaryOrBonus { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

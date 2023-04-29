@@ -21,6 +21,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     public DbSet<Cars> Cars { get; set; }
     public DbSet<Document> Document { get; set; }
 
+    public DbSet<Payment> Payment { get; set; }
+
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
@@ -48,6 +50,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     {
         builder.Entity<Cars>().HasKey(c => c.CarID);
         builder.Entity<Document>().HasKey(d => d.DocID);
+        builder.Entity<Payment>().HasKey(p => p.PaymentID);
+        builder.Entity<Offers>().HasKey(p => p.OfferID);
 
         // Configure the foreign key between User and Document entities
         builder.Entity<User>()
@@ -55,6 +59,21 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
             .WithMany()
             .HasForeignKey(u => u.DocId)
             .OnDelete(DeleteBehavior.SetNull);
+
+
+        // Configure the foreign key between Payment and Offer entities
+        builder.Entity<Payment>()
+           .HasOne(u => u.Offers)
+           .WithMany()
+           .HasForeignKey(u => u.OfferID)
+           .OnDelete(DeleteBehavior.SetNull);
+
+        // Configure the foreign key between Payment and Rental entities
+        builder.Entity<Payment>()
+           .HasOne(u => u.Rental)
+           .WithMany()
+           .HasForeignKey(u => u.RentalID)
+           .OnDelete(DeleteBehavior.SetNull);
 
         var ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
         var ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";

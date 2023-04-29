@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HKCR.Infra.Migrations
 {
-    public partial class Initial : Migration
+    public partial class payment : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -61,7 +61,8 @@ namespace HKCR.Infra.Migrations
                     CarRentalRate = table.Column<string>(type: "text", nullable: false),
                     CarAvailability = table.Column<int>(type: "integer", nullable: false),
                     CarNoOfRent = table.Column<string>(type: "text", nullable: false),
-                    CarLastRented = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CarLastRented = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CarImage = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,6 +80,33 @@ namespace HKCR.Infra.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Document", x => x.DocID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Offers",
+                columns: table => new
+                {
+                    OfferID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OfferName = table.Column<string>(type: "text", nullable: false),
+                    OfferType = table.Column<string>(type: "text", nullable: false),
+                    OfferAmount = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offers", x => x.OfferID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Staff",
+                columns: table => new
+                {
+                    StaffID = table.Column<Guid>(type: "uuid", nullable: false),
+                    StaffEmail = table.Column<string>(type: "text", nullable: false),
+                    StaffPassword = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staff", x => x.StaffID);
                 });
 
             migrationBuilder.CreateTable(
@@ -218,6 +246,90 @@ namespace HKCR.Infra.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Customer",
+                columns: table => new
+                {
+                    CustomerID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomerDiscount = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customer", x => x.CustomerID);
+                    table.ForeignKey(
+                        name: "FK_Customer_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rental",
+                columns: table => new
+                {
+                    RentalID = table.Column<Guid>(type: "uuid", nullable: false),
+                    RentalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RentalStatus = table.Column<string>(type: "text", nullable: false),
+                    DamageStatus = table.Column<string>(type: "text", nullable: false),
+                    CarID = table.Column<Guid>(type: "uuid", nullable: false),
+                    StaffID = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomerID = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rental", x => x.RentalID);
+                    table.ForeignKey(
+                        name: "FK_Rental_Cars_CarID",
+                        column: x => x.CarID,
+                        principalTable: "Cars",
+                        principalColumn: "CarID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rental_Customer_CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "Customer",
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rental_Staff_StaffID",
+                        column: x => x.StaffID,
+                        principalTable: "Staff",
+                        principalColumn: "StaffID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payment",
+                columns: table => new
+                {
+                    PaymentID = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentType = table.Column<string>(type: "text", nullable: false),
+                    PaymentTotal = table.Column<int>(type: "integer", nullable: false),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RentalID = table.Column<Guid>(type: "uuid", nullable: false),
+                    OfferID = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payment", x => x.PaymentID);
+                    table.ForeignKey(
+                        name: "FK_Payment_Offers_OfferID",
+                        column: x => x.OfferID,
+                        principalTable: "Offers",
+                        principalColumn: "OfferID",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Payment_Rental_RentalID",
+                        column: x => x.RentalID,
+                        principalTable: "Rental",
+                        principalColumn: "RentalID",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -226,7 +338,7 @@ namespace HKCR.Infra.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "60bed42a-94d9-4157-a350-8c2a2aae05fd", "admin@hajur.com", true, false, null, null, "ADMIN@HAJUR.COM", "AQAAAAEAACcQAAAAEHBnC2ukoMSLrfnuCeKSlCIEdf2WxHZvC/H3bSQX7fvfe5AlNm8J2nhW9ahO1OQCyw==", null, false, "53feeaa3-ebdc-4a2b-9b19-b250bfeab53f", false, "Hajur Ko Admin" });
+                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "1c6b70c9-934a-4adf-b63d-27cae6237184", "admin@hajur.com", true, false, null, "ADMIN@HAJUR.COM", "HAJUR KO ADMIN", "AQAAAAEAACcQAAAAECjJ5dihrwEYRrNet7ZaBVrdiXd66lHU7VVEo2hM7ZQAI/IhTJCuJsYB0OPnltD5Sg==", null, false, "ed4deb00-7e21-45f4-bdb0-0655609a42b5", false, "Hajur Ko Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -271,6 +383,36 @@ namespace HKCR.Infra.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Customer_UserId",
+                table: "Customer",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_OfferID",
+                table: "Payment",
+                column: "OfferID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_RentalID",
+                table: "Payment",
+                column: "RentalID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rental_CarID",
+                table: "Rental",
+                column: "CarID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rental_CustomerID",
+                table: "Rental",
+                column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rental_StaffID",
+                table: "Rental",
+                column: "StaffID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_DocId",
                 table: "User",
                 column: "DocId");
@@ -294,16 +436,31 @@ namespace HKCR.Infra.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cars");
-
-            migrationBuilder.DropTable(
-                name: "User");
+                name: "Payment");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Offers");
+
+            migrationBuilder.DropTable(
+                name: "Rental");
+
+            migrationBuilder.DropTable(
+                name: "Cars");
+
+            migrationBuilder.DropTable(
+                name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "Staff");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Document");
