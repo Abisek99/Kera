@@ -444,15 +444,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84835d1e-89d6-4836-88d3-903808375d60",
+                            ConcurrencyStamp = "65c578f9-fff0-4682-ac6c-897c218aa20f",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPGR4GMk2y4IoPNWmhye+xStvkLtGq3mm0jcJwO/FedeTCdYvp50aw8yTPBmiANBdw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEaTk7CQNDv9GMuqE9YYGAVL3PO38zzomDzb1n67if1l7Up5PZE3WvC0UvhsLiUHJA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2b64e57d-2f1e-4946-9f57-39ff4d3de047",
+                            SecurityStamp = "32b2b60d-8d81-42ef-9df1-8954841a274a",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });

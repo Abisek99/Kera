@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HKCR.Infra.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Rent : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -367,7 +367,7 @@ namespace HKCR.Infra.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "84835d1e-89d6-4836-88d3-903808375d60", "admin@hajur.com", true, false, null, "ADMIN@HAJUR.COM", "HAJUR KO ADMIN", "AQAAAAEAACcQAAAAEPGR4GMk2y4IoPNWmhye+xStvkLtGq3mm0jcJwO/FedeTCdYvp50aw8yTPBmiANBdw==", null, false, "2b64e57d-2f1e-4946-9f57-39ff4d3de047", false, "Hajur Ko Admin" });
+                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "65c578f9-fff0-4682-ac6c-897c218aa20f", "admin@hajur.com", true, false, null, "ADMIN@HAJUR.COM", "HAJUR KO ADMIN", "AQAAAAEAACcQAAAAEEaTk7CQNDv9GMuqE9YYGAVL3PO38zzomDzb1n67if1l7Up5PZE3WvC0UvhsLiUHJA==", null, false, "32b2b60d-8d81-42ef-9df1-8954841a274a", false, "Hajur Ko Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
