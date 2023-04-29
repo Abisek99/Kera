@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     public DbSet<User> User { get; set; }
     public DbSet<Cars> Cars { get; set; }
     public DbSet<Document> Document { get; set; }
+    public DbSet<Offers> Offers { get; set; }
     public DbSet<DamageRequest> DamageRequest { get; set; }
 
 
@@ -49,6 +50,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     {
         builder.Entity<Cars>().HasKey(c => c.CarID);
         builder.Entity<Document>().HasKey(d => d.DocID);
+        builder.Entity<Offers>().HasKey(d => d.OfferID);
         builder.Entity<DamageRequest>().HasKey(da => da.DamageId);
 
         // Configure the foreign key between User and Document entities
