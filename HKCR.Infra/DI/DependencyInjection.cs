@@ -45,6 +45,8 @@ public static class DependencyInjection
         services.AddTransient<ICarDetails, CarDetails>();
         services.AddTransient<IDocDetails, DocDetails>();
         services.AddTransient<IOffersDetails, OffersService>();
+        services.AddTransient<IDamageRequestDetails, DamageRequestService>();
+
         services.AddTransient<IUserDetails, UserDetails>();
 
         return services;

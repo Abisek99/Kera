@@ -21,6 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     public DbSet<Cars> Cars { get; set; }
     public DbSet<Document> Document { get; set; }
     public DbSet<Offers> Offers { get; set; }
+    public DbSet<DamageRequest> DamageRequest { get; set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -50,6 +51,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
         builder.Entity<Cars>().HasKey(c => c.CarID);
         builder.Entity<Document>().HasKey(d => d.DocID);
         builder.Entity<Offers>().HasKey(d => d.OfferID);
+        builder.Entity<DamageRequest>().HasKey(da => da.DamageId);
 
         // Configure the foreign key between User and Document entities
         builder.Entity<User>()
@@ -57,6 +59,22 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
             .WithMany()
             .HasForeignKey(u => u.DocId)
             .OnDelete(DeleteBehavior.SetNull);
+        
+        // Configure the foreign key between DamageRequest and Customer entities
+        builder.Entity<DamageRequest>()
+            .HasOne(u => u.Customer)
+            .WithMany()
+            .HasForeignKey(u => u.CustomerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // Configure the foreign key between DamageRequest and Rental entities
+        builder.Entity<DamageRequest>()
+            .HasOne(u => u.Rental)
+            .WithMany()
+            .HasForeignKey(u => u.RentalId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+
 
         var ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
         var ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";
