@@ -10,6 +10,8 @@ public interface IApplicationDbContext
     DbSet<Document> Document { get; set; }
     DbSet<Rental> Rental { get; set; }
 
+    DbSet<Offers> Offers { get; set; }
+    DbSet<DamageRequest> DamageRequest { get; set; }
 
     // DbSet<Department> Department { get; set; }
     // DbSet<SalaryOrBonus> SalaryOrBonus { get; set; }
