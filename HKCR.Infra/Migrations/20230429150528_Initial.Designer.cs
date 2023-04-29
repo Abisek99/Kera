@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230429090106_Initial")]
+    [Migration("20230429150528_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -446,15 +446,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84835d1e-89d6-4836-88d3-903808375d60",
+                            ConcurrencyStamp = "6a78094c-eb06-4d48-8e0b-0ffb626f8a8a",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPGR4GMk2y4IoPNWmhye+xStvkLtGq3mm0jcJwO/FedeTCdYvp50aw8yTPBmiANBdw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHtYsWAeg7ZKhhoGP8GWKZ/C2ccRyN24sRESkixTFC9DmQJGVYLiYM6wEcrUEQA1BQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2b64e57d-2f1e-4946-9f57-39ff4d3de047",
+                            SecurityStamp = "bbd803db-89a2-4152-8313-91dc6cc3e272",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });
