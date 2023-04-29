@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230428111913_Initial")]
-    partial class Initial
+    [Migration("20230428170025_Car")]
+    partial class Car
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,9 @@ namespace HKCR.Infra.Migrations
 
                     b.Property<string>("CarColor")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CarImage")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CarLastRented")
@@ -272,14 +275,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "60bed42a-94d9-4157-a350-8c2a2aae05fd",
+                            ConcurrencyStamp = "7b7d8660-c226-4835-9d24-1ca2f9ad96a9",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            NormalizedUserName = "ADMIN@HAJUR.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHBnC2ukoMSLrfnuCeKSlCIEdf2WxHZvC/H3bSQX7fvfe5AlNm8J2nhW9ahO1OQCyw==",
+                            NormalizedEmail = "ADMIN@HAJUR.COM",
+                            NormalizedUserName = "HAJUR KO ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDs5Wl7sKMHjVefEuILtM/uA0dnMOhzH8em1O6UsyI+yKTDDxjclhHpX06FFcI+R0A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "53feeaa3-ebdc-4a2b-9b19-b250bfeab53f",
+                            SecurityStamp = "2c6ca453-97c1-4a4a-a61f-d9ca9a10fda0",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });
