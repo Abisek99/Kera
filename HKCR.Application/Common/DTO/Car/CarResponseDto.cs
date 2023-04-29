@@ -18,5 +18,6 @@ namespace HKCR.Application.Common.DTO
         public string CarNoOfRent { get; set; }
         public DateTime? CarLastRented { get; set; }
         public string? CarImage { get; set; }
+        public Guid CarID { get; set; }
     }
 }
