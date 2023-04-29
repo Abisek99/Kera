@@ -1,6 +1,7 @@
 ﻿using HKCR.Application.Common.DTO;
 using HKCR.Application.Common.DTO.Offers;
 using HKCR.Application.Common.Interface;
+using HKCR.Infra.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HKCR.API.Controllers
@@ -15,11 +16,19 @@ namespace HKCR.API.Controllers
             _offersDetails = offersDetails;
         }
 
+        [HttpGet]
+        [Route("/api/v1/offers")]
+        public async Task<List<OffersResponseDto>> GetAllOffersResponseDetails()
+        {
+            var data = await _offersDetails.GetAllOffersDetailsAsync();
+            return data;
+        }
+
         [HttpPost]
         [Route("/api/v1/offers")]
-        public async Task<OffersResponseDto> AddOffersDetails(OffersRequestDto car)
+        public async Task<OffersResponseDto> AddOffersDetails(OffersRequestDto offers)
         {
-            var data = await _offersDetails.AddOffersDetails(car);
+            var data = await _offersDetails.AddOffersDetails(offers);
             return data;
         }
     }
