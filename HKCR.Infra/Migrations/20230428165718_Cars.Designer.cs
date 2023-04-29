@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230428113611_Car_Image")]
-    partial class Car_Image
+    [Migration("20230428165718_Cars")]
+    partial class Cars
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -275,15 +275,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "067acbf7-1764-46b8-8a60-b1f5f878f5b7",
+                            ConcurrencyStamp = "ee47c37d-719f-4d43-8e3e-7e3f4e51b360",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOtDieP8h4I179vZ4JLIv26w3rACSuGfVW5GSGxwujsXekJUFakPfXB8KL4TMsPLlA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC663preaVe1VyLZsiZvabWPz1vvrauUIQml+1F7YqOrEHuxe4R38ncZPryXUtkheg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b76ade3e-7ed5-444a-a453-7d215d6539d0",
+                            SecurityStamp = "b367e123-b927-4987-bddf-f8b3ad28cbf8",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });

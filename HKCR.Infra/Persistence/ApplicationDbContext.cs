@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     public DbSet<User> User { get; set; }
     public DbSet<Cars> Cars { get; set; }
     public DbSet<Document> Document { get; set; }
+    public DbSet<Offers> Offers { get; set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -48,6 +49,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     {
         builder.Entity<Cars>().HasKey(c => c.CarID);
         builder.Entity<Document>().HasKey(d => d.DocID);
+        builder.Entity<Offers>().HasKey(d => d.OfferID);
 
         // Configure the foreign key between User and Document entities
         builder.Entity<User>()

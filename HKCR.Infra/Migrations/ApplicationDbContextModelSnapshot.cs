@@ -84,6 +84,29 @@ namespace HKCR.Infra.Migrations
                     b.ToTable("Document");
                 });
 
+            modelBuilder.Entity("HKCR.Domain.Entities.Offers", b =>
+                {
+                    b.Property<Guid>("OfferID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OfferAmount")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OfferName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OfferType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("OfferID");
+
+                    b.ToTable("Offers");
+                });
+
             modelBuilder.Entity("HKCR.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -273,15 +296,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "067acbf7-1764-46b8-8a60-b1f5f878f5b7",
+                            ConcurrencyStamp = "054ad507-2c76-41ae-857d-06fee1b9f299",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOtDieP8h4I179vZ4JLIv26w3rACSuGfVW5GSGxwujsXekJUFakPfXB8KL4TMsPLlA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJUDt8kaW+4B87rmapOk8GL8/B5gcKjTjzuD3deIj2xHfcYpE6H6STmIutNnHkJuJg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b76ade3e-7ed5-444a-a453-7d215d6539d0",
+                            SecurityStamp = "e6a90133-ab77-40a3-b8f8-1c433d242d58",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });

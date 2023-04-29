@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230428111913_Initial")]
-    partial class Initial
+    [Migration("20230429073054_Offers")]
+    partial class Offers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,9 @@ namespace HKCR.Infra.Migrations
 
                     b.Property<string>("CarColor")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CarImage")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CarLastRented")
@@ -81,6 +84,29 @@ namespace HKCR.Infra.Migrations
                     b.HasKey("DocID");
 
                     b.ToTable("Document");
+                });
+
+            modelBuilder.Entity("HKCR.Domain.Entities.Offers", b =>
+                {
+                    b.Property<Guid>("OfferID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OfferAmount")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OfferName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OfferType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("OfferID");
+
+                    b.ToTable("Offers");
                 });
 
             modelBuilder.Entity("HKCR.Domain.Entities.User", b =>
@@ -272,14 +298,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "60bed42a-94d9-4157-a350-8c2a2aae05fd",
+                            ConcurrencyStamp = "054ad507-2c76-41ae-857d-06fee1b9f299",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            NormalizedUserName = "ADMIN@HAJUR.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHBnC2ukoMSLrfnuCeKSlCIEdf2WxHZvC/H3bSQX7fvfe5AlNm8J2nhW9ahO1OQCyw==",
+                            NormalizedEmail = "ADMIN@HAJUR.COM",
+                            NormalizedUserName = "HAJUR KO ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJUDt8kaW+4B87rmapOk8GL8/B5gcKjTjzuD3deIj2xHfcYpE6H6STmIutNnHkJuJg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "53feeaa3-ebdc-4a2b-9b19-b250bfeab53f",
+                            SecurityStamp = "e6a90133-ab77-40a3-b8f8-1c433d242d58",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });
