@@ -2,6 +2,7 @@
 using HKCR.Application.Common.DTO.Car;
 using HKCR.Application.Common.Interface;
 using HKCR.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HKCR.Infra.Services
 {
@@ -26,7 +27,7 @@ namespace HKCR.Infra.Services
                 CarColor = car.CarColor,
                 CarLastRented = car.CarLastRented,
                 CarModel = car.CarModel,
-                CarRentalRate = car.CarRentalRate ?? "",
+                CarRentalRate = car.CarRentalRate,
                 CarNoOfRent = car.CarNoOfRent,
                 CarImage = car.CarImage
             };
@@ -79,6 +80,48 @@ namespace HKCR.Infra.Services
                 CarNoOfRent = data.CarNoOfRent,
                 CarImage = data.CarImage
             };
+            return result;
+        }
+
+        public async Task<CarResponseDto> UpdateCarRentalDetails(Guid id)
+        {
+            var data = await _dbContext.Cars.FindAsync(id);
+            if (data != null)
+            {
+                data.CarLastRented = DateTime.UtcNow;
+                data.CarNoOfRent += 1;
+                data.CarAvailability = "Rented";
+            }
+
+            await _dbContext.SaveChangesAsync(default(CancellationToken));
+            var result = new CarResponseDto()
+            {
+                CarID = data.CarID,
+                CarName = data.CarName,
+                CarBrand = data.CarBrand,
+                CarAvailability = data.CarAvailability,
+                CarColor = data.CarColor,
+                CarLastRented = data.CarLastRented,
+                CarModel = data.CarModel,
+                CarRentalRate = data.CarRentalRate,
+                CarNoOfRent = data.CarNoOfRent,
+                CarImage = data.CarImage
+            };
+            return result;
+        }
+
+        // Delete Car
+        public async Task<ResponseDto> DeleteCar(Guid id)
+        {
+            var car = await _dbContext.Cars.FindAsync(id);
+            if (car == null)
+            {
+                return new ResponseDto { Message = $"Car with ID {id} not found." };
+            }
+
+            _dbContext.Cars.Remove(car);
+            await _dbContext.SaveChangesAsync(default(CancellationToken));
+            var result = new ResponseDto() { Message = $"Car: {car.CarName} Deletion Successful" };
             return result;
         }
 

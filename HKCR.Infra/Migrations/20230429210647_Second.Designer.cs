@@ -3,6 +3,7 @@ using System;
 using HKCR.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230429210647_Second")]
+    partial class Second
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,27 +61,6 @@ namespace HKCR.Infra.Migrations
 
                     b.Property<double?>("CarRentalRate")
                         .HasColumnType("double precision");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DeletedTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
 
                     b.HasKey("CarID");
 
@@ -285,13 +266,13 @@ namespace HKCR.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("CreatedBy")
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("DeletedBy")
+                    b.Property<Guid>("DeletedBy")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletedTime")
@@ -305,13 +286,13 @@ namespace HKCR.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -464,15 +445,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "000974c4-e599-4849-bb47-59cbfc38b8bb",
+                            ConcurrencyStamp = "f7c29f7a-10c3-43d6-a243-8af4861b53bc",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIw0Zz6Ltu/aoZfWD4mz4gkcftnUNKh8+4pDKU+YHdenBMPSqyGVg+mexe4yuKb6Zw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGOoZNGPr8CgZrCQ152AJM1TmuGrzv+uIwat1BGZi/dfc17spZQmdETuScWNdcWG0g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9e1a3ad6-192c-48eb-8d1f-8c7cd9ff9358",
+                            SecurityStamp = "5167b498-1534-4d00-a99b-8c057f413727",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });

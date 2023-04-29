@@ -8,9 +8,9 @@ namespace HKCR.Application.Common.DTO.Car
         public string? CarBrand { get; set; }
         public string? CarModel { get; set; }
         public string? CarColor { get; set; }
-        public string? CarRentalRate { get; set; }
-        public CarStatus CarAvailability { get; set; }
-        public string? CarNoOfRent { get; set; }
+        public double? CarRentalRate { get; set; }
+        public string CarAvailability { get; set; }
+        public int? CarNoOfRent { get; set; }
         public DateTime? CarLastRented { get; set; }
         public string? CarImage { get; set; }
 

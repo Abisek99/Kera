@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HKCR.Infra.Migrations
 {
-    public partial class Rent : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,9 +58,9 @@ namespace HKCR.Infra.Migrations
                     CarBrand = table.Column<string>(type: "text", nullable: false),
                     CarModel = table.Column<string>(type: "text", nullable: false),
                     CarColor = table.Column<string>(type: "text", nullable: false),
-                    CarRentalRate = table.Column<string>(type: "text", nullable: false),
+                    CarRentalRate = table.Column<double>(type: "double precision", nullable: true),
                     CarAvailability = table.Column<int>(type: "integer", nullable: false),
-                    CarNoOfRent = table.Column<string>(type: "text", nullable: false),
+                    CarNoOfRent = table.Column<int>(type: "integer", nullable: true),
                     CarLastRented = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CarImage = table.Column<string>(type: "text", nullable: true)
                 },
@@ -367,7 +367,7 @@ namespace HKCR.Infra.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "65c578f9-fff0-4682-ac6c-897c218aa20f", "admin@hajur.com", true, false, null, "ADMIN@HAJUR.COM", "HAJUR KO ADMIN", "AQAAAAEAACcQAAAAEEaTk7CQNDv9GMuqE9YYGAVL3PO38zzomDzb1n67if1l7Up5PZE3WvC0UvhsLiUHJA==", null, false, "32b2b60d-8d81-42ef-9df1-8954841a274a", false, "Hajur Ko Admin" });
+                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "862fa604-6c40-46e7-bd5a-190e507df1fd", "admin@hajur.com", true, false, null, "ADMIN@HAJUR.COM", "HAJUR KO ADMIN", "AQAAAAEAACcQAAAAELGNAwwWnSCZmT8WqWVA3oni4t7v3JwGS7l65fmGJH3PdUQMAcdbH6MT69iLKDS0Mw==", null, false, "cf30fc76-3997-4b17-9e19-8cce11a4dd40", false, "Hajur Ko Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

@@ -24,8 +24,4 @@
     <ProjectReference Include="..\HKCR.Application\HKCR.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

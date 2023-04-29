@@ -1,9 +1,4 @@
 ﻿using HKCR.Application.Common.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HKCR.Application.Common.DTO.Car;
 
 namespace HKCR.Application.Common.Interface
@@ -15,5 +10,7 @@ namespace HKCR.Application.Common.Interface
         Task<List<CarResponseDto>> GetAllCars();
         Task<CarResponseDto> AddCarDetails(CarRequestDto car);
         Task<CarResponseDto> UpdateCarDetails(Guid id, UpdateCarRequestDto car);
+        Task<CarResponseDto> UpdateCarRentalDetails(Guid id);
+        Task<ResponseDto> DeleteCar(Guid id);
     }
 }

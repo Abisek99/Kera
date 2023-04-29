@@ -33,7 +33,7 @@ namespace HKCR.API.Controllers
         }
 
         [HttpPost]
-        [Route("/api/v1/cars")]
+        [Route("/api/v1/cars/add")]
         public async Task<CarResponseDto> AddCarDetails(CarRequestDto car)
         {
             var data = await _carDetails.AddCarDetails(car);
@@ -41,7 +41,7 @@ namespace HKCR.API.Controllers
         }
 
         [HttpPatch]
-        [Route("/api/v1/cars/{id}")]
+        [Route("/api/v1/cars/update-car/{id}")]
         public async Task<CarResponseDto> UpdateCarDetails(Guid id, UpdateCarRequestDto updateCar)
         {
             try
@@ -55,6 +55,22 @@ namespace HKCR.API.Controllers
             }
 
             var data = await _carDetails.UpdateCarDetails(id, updateCar);
+            return data;
+        }
+
+        [HttpPatch]
+        [Route("/api/v1/car/update-rental/{id}")]
+        public async Task<CarResponseDto> UpdateCarRentalDetails(Guid id)
+        {
+            var data = await _carDetails.UpdateCarRentalDetails(id);
+            return data;
+        }
+
+        [HttpDelete]
+        [Route("/api/v1/car/delete/{id}")]
+        public async Task<ResponseDto> DeleteCar(Guid id)
+        {
+            var data = await _carDetails.DeleteCar(id);
             return data;
         }
     }

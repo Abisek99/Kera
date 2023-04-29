@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230429124850_Rent")]
-    partial class Rent
+    [Migration("20230429205734_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,13 +55,11 @@ namespace HKCR.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CarNoOfRent")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("CarNoOfRent")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("CarRentalRate")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double?>("CarRentalRate")
+                        .HasColumnType("double precision");
 
                     b.HasKey("CarID");
 
@@ -446,15 +444,15 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "65c578f9-fff0-4682-ac6c-897c218aa20f",
+                            ConcurrencyStamp = "862fa604-6c40-46e7-bd5a-190e507df1fd",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "HAJUR KO ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEaTk7CQNDv9GMuqE9YYGAVL3PO38zzomDzb1n67if1l7Up5PZE3WvC0UvhsLiUHJA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELGNAwwWnSCZmT8WqWVA3oni4t7v3JwGS7l65fmGJH3PdUQMAcdbH6MT69iLKDS0Mw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "32b2b60d-8d81-42ef-9df1-8954841a274a",
+                            SecurityStamp = "cf30fc76-3997-4b17-9e19-8cce11a4dd40",
                             TwoFactorEnabled = false,
                             UserName = "Hajur Ko Admin"
                         });
