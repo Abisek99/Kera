@@ -118,7 +118,6 @@ public class AuthenticationService : IAuthentication
     // JWT
     private string GenerateJwtToken(IdentityUser user)
     {
-        // var jwtSecret = _configuration.GetValue<string>("JwtSecret");
         var jwtSecret = _configuration.GetConnectionString("jwtSecret");
         var key = Encoding.ASCII.GetBytes(jwtSecret);
 
