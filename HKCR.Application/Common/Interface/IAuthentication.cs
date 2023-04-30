@@ -6,5 +6,6 @@ public interface IAuthentication
 {
     Task<ResponseDto> Register(UserRegisterRequestDto model);
     Task<ResponseDto> Login(UserLoginRequestDto model);
+    Task<ResponseDto> Logout();
     Task<IEnumerable<UserDetailsDto>> GetUserDetails();
 }

@@ -15,6 +15,14 @@ public class AuthController : ControllerBase
         _authenticationManager = authenticationManager;
     }
 
+    [HttpGet]
+    [Route("/api/v1/auth/getUserDetails")]
+    public async Task<IEnumerable<UserDetailsDto>> GetUserDetails()
+    {
+        var result = await _authenticationManager.GetUserDetails();
+        return result;
+    }
+
     [HttpPost]
     [Route("/api/v1/auth/register")]
     public async Task<ResponseDto> Register([FromBody] UserRegisterRequestDto model)
@@ -23,20 +31,20 @@ public class AuthController : ControllerBase
         return result;
     }
 
-    [HttpGet]
-    [Route("/api/authenticate/getUserDetails")]
-    public async Task<IEnumerable<UserDetailsDto>> GetUserDetails()
-    {
-        var result = await _authenticationManager.GetUserDetails();
-        return result;
-    }
-
     [HttpPost]
     [AllowAnonymous]
-    [Route("/api/authenticate/login")]
+    [Route("/api/v1/auth/login")]
     public async Task<ResponseDto> Login([FromBody] UserLoginRequestDto user)
     {
         var result = await _authenticationManager.Login(user);
+        return result;
+    }
+
+    [HttpGet]
+    [Route("/api/v1/auth/logout")]
+    public async Task<ResponseDto> Logout()
+    {
+        var result = await _authenticationManager.Logout();
         return result;
     }
 }

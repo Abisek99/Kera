@@ -2,10 +2,12 @@
 using HKCR.Application.Common.Interface;
 using HKCR.Infra.Persistence;
 using HKCR.Infra.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 // using Microsoft.AspNetCore.Authentication.JwtBearer;
 //using Microsoft.IdentityModel.Tokens;
@@ -50,34 +52,32 @@ public static class DependencyInjection
         services.AddTransient<IOffersDetails, OffersService>();
         services.AddTransient<IDamageRequestDetails, DamageRequestService>();
 
-        services.AddTransient<IUserDetails, UserDetails>();
+        // services.AddTransient<IUserDetails, UserDetails>();
 
         return services;
     }
-
-    //     
-    //     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
-    //     {
-    //         var jwtConfig = configuration.GetSection("jwtConfig");
-    //         var secretKey = jwtConfig["secret"];
-    //         services.AddAuthentication(opt =>
-    //             {
-    //                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    //                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    //             })
-    //             .AddJwtBearer(options =>
-    //             {
-    //                 options.TokenValidationParameters = new TokenValidationParameters
-    //                 {
-    //                     ValidateIssuer = true,
-    //                     ValidateAudience = true,
-    //                     ValidateLifetime = true,
-    //                     ValidateIssuerSigningKey = true,
-    //                     ValidIssuer = jwtConfig["validIssuer"],
-    //                     ValidAudience = jwtConfig["validAudience"],
-    //                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-    //                 };
-    //             });
-    //     }
-    // }
+    
+    public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtConfig = configuration.GetSection("jwtConfig");
+        var secretKey = jwtConfig["secret"];
+        services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtConfig["validIssuer"],
+                    ValidAudience = jwtConfig["validAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
+    }
 }
