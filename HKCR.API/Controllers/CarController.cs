@@ -1,6 +1,7 @@
 ﻿using HKCR.Application.Common.DTO;
 using HKCR.Application.Common.DTO.Car;
 using HKCR.Application.Common.Interface;
+using HKCR.Infra.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HKCR.API.Controllers

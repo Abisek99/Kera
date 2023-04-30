@@ -98,20 +98,6 @@ public class AuthenticationService : IAuthentication
                 UserName = userData.UserName,
                 IsEmailConfirmed = userData.EmailConfirmed
             };
-
-        //OR
-        // var userDatas = new List<UserDetailsDto>();
-        // foreach (var item in users)
-        // {
-        //     userDatas.Add(new UserDetailsDto()
-        //     {
-        //         Email = item.Email,
-        //         UserName = item.UserName,
-        //         IsEmailConfirmed = item.EmailConfirmed
-        //     });
-        // }
-        //
-        // return userDatas;
         return userDetails;
     }
 

@@ -30,6 +30,15 @@ public static class DependencyInjection
         //     .AddEntityFrameworkStores<ApplicationDbContext>()
         //     .AddDefaultTokenProviders();
 
+        // Configure Cloudinary settings
+        // var cloudinaryAccount = new Account(
+        //     "dg8j5cck1",
+        //     "<257774814993417>",
+        //     "<J93nr_PWFg2-9PqxkTQ761fErdc>"
+        // );
+        // var cloudinary = new Cloudinary(cloudinaryAccount);
+        // services.AddSingleton(cloudinary);
+
         services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -56,7 +65,7 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtConfig = configuration.GetSection("jwtConfig");

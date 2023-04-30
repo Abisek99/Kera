@@ -1,4 +1,4 @@
-﻿namespace HKCR.Domain.Shared;
+﻿namespace HKCR.Domain.Shared.Enum;
 
 public enum CarStatus
 {
