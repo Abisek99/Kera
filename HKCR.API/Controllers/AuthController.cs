@@ -23,9 +23,25 @@ public class AuthController : ControllerBase
         return result;
     }
 
+    [HttpGet]
+    [Route("/api/v1/auth/getSingleUser")]
+    public async Task<UserDetailsDto> GetSingleUser(string username)
+    {
+        var result = await _authenticationManager.GetSingleUser(username);
+        return result;
+    }
+
+    // [HttpGet]
+    // [Route("/api/v1/auth/getOneUser/{id}")]
+    // public async Task<UserDetailsDto> GetOneUser(Guid id)
+    // {
+    //     var result = await _authenticationManager.GetOneUser(id);
+    //     return result;
+    // }
+
     [HttpPost]
     [Route("/api/v1/auth/register")]
-    public async Task<ResponseDto> Register([FromBody] UserRegisterRequestDto model)
+    public async Task<AuthResponseDto> Register([FromBody] UserRegisterRequestDto model)
     {
         var result = await _authenticationManager.Register(model);
         return result;
@@ -34,7 +50,7 @@ public class AuthController : ControllerBase
     [HttpPost]
     [AllowAnonymous]
     [Route("/api/v1/auth/login")]
-    public async Task<ResponseDto> Login([FromBody] UserLoginRequestDto user)
+    public async Task<AuthResponseDto> Login([FromBody] UserLoginRequestDto user)
     {
         var result = await _authenticationManager.Login(user);
         return result;

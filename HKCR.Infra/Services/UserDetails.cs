@@ -54,10 +54,6 @@ public class UserDetails : IUserDetails
             Name = user.Name,
             Email = user.Email,
             Password = user.Password
-            // JoinDate = employee.JoinDate,
-            // Designation = employee.Designation,
-            // Salary = employee.Salary,
-            // DepartmentId = employee.DepartmentId
         };
         await _dbContext.User.AddAsync(userDetails);
         await _dbContext.SaveChangesAsync(default(CancellationToken));

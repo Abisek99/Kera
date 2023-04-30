@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using HKCR.Application.Common.Interface;
+using HKCR.Domain.Entities;
 using HKCR.Infra.Persistence;
 using HKCR.Infra.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,10 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-// using Microsoft.AspNetCore.Authentication.JwtBearer;
-//using Microsoft.IdentityModel.Tokens;
 
 namespace HKCR.Infra.DI;
+
 
 public static class DependencyInjection
 {
@@ -30,38 +30,31 @@ public static class DependencyInjection
         //     .AddEntityFrameworkStores<ApplicationDbContext>()
         //     .AddDefaultTokenProviders();
 
-        // Configure Cloudinary settings
-        // var cloudinaryAccount = new Account(
-        //     "dg8j5cck1",
-        //     "<257774814993417>",
-        //     "<J93nr_PWFg2-9PqxkTQ761fErdc>"
-        // );
-        // var cloudinary = new Cloudinary(cloudinaryAccount);
-        // services.AddSingleton(cloudinary);
-
-        services.AddIdentity<IdentityUser, IdentityRole>(options =>
+        services.AddIdentity<AddUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 4;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
-
+        
+        
         services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+        services.AddScoped<UserManager<AddUser>, UserManager<AddUser>>();
+        
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IAuthentication, AuthenticationService>();
         services.AddTransient<ICarDetails, CarDetails>();
         services.AddTransient<IDocDetails, DocDetails>();
         services.AddTransient<IPaymentDetails, PaymentService>();
         services.AddTransient<IRentalDetails, RentalServices>();
-        //services.AddTransient<ICustomerDetails, CustomerService>();
         services.AddTransient<IOffersDetails, OffersService>();
         services.AddTransient<IDamageRequestDetails, DamageRequestService>();
-
         // services.AddTransient<IUserDetails, UserDetails>();
+        // services.AddTransient<ICustomerDetails, CustomerService>();
 
         return services;
     }

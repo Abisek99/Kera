@@ -14,6 +14,7 @@ public interface IApplicationDbContext
     DbSet<DamageRequest> DamageRequest { get; set; }
 
     DbSet<Payment> Payment { get; set; }
+    DbSet<AddUser> AddUser { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

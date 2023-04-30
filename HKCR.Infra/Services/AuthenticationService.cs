@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using HKCR.Application.Common.DTO;
 using HKCR.Application.Common.Interface;
+using HKCR.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,61 +13,84 @@ namespace HKCR.Infra.Services;
 
 public class AuthenticationService : IAuthentication
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<AddUser> _userManager;
+    private readonly SignInManager<AddUser> _signInManager;
     private readonly IConfiguration _configuration;
+    private readonly IApplicationDbContext _dbContext;
 
-    public AuthenticationService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
-        IConfiguration configuration)
+    public AuthenticationService(UserManager<AddUser> userManager, SignInManager<AddUser> signInManager,
+        IConfiguration configuration, IApplicationDbContext dbContext)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
+        _dbContext = dbContext;
     }
 
-    public async Task<ResponseDto> Register(UserRegisterRequestDto model)
+    public async Task<AuthResponseDto> Register(UserRegisterRequestDto model)
     {
         var userExists = await _userManager.FindByNameAsync(model.Email);
         if (userExists != null)
-            return new ResponseDto { Status = "Error", Message = "User already exists!" };
+            return new AuthResponseDto() { Status = "Error", Message = "User already exists!", StatusCode = 401 };
 
-        IdentityUser user = new()
+        if (string.IsNullOrEmpty(model.RoleUser))
         {
+            model.RoleUser = "user";
+        }
+
+        AddUser user = new()
+        {
+            Name = model.Name,
+            IsStaff = false,
             Email = model.Email,
+            RoleUser = model.RoleUser,
+            PhoneNumber = model.PhoneNumber,
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = model.Username
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded)
-            return new ResponseDto
+            return new AuthResponseDto
             {
-                Status = "Error", Message = "User creation failed! Please check user details and try again."
+                Status = "Error",
+                Message = "User creation failed! Please check user details and try again.",
+                StatusCode = 403,
             };
 
         var oneUser = await _userManager.FindByNameAsync(model.Username);
-        return new ResponseDto
-            { Status = "Success", Message = "User created successfully!", Token = GenerateJwtToken(oneUser) };
+        return new AuthResponseDto
+        {
+            Status = "Success",
+            Message = "User created successfully!",
+            Token = GenerateJwtToken(oneUser),
+            UserName = oneUser.UserName,
+            StatusCode = 201,
+            UserRole = oneUser.RoleUser
+        };
     }
 
-    public async Task<ResponseDto> Login(UserLoginRequestDto model)
+    public async Task<AuthResponseDto> Login(UserLoginRequestDto model)
     {
         var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, false);
 
-        if (result.Succeeded)
-        {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            GenerateJwtToken(user);
-            return new ResponseDto()
+        if (!result.Succeeded)
+            return new AuthResponseDto()
             {
-                Message = "User logged in!", Status = "Success", Token = GenerateJwtToken(user)
+                Message = "User login failed! Please check user details and try again.!",
+                Status = "Error"
             };
-        }
-
-        return new ResponseDto()
+        var user = await _userManager.FindByNameAsync(model.Username);
+        GenerateJwtToken(user);
+        return new AuthResponseDto()
         {
-            Message = "User login failed! Please check user details and try again.!",
-            Status = "Error"
+            Message = "User logged in!",
+            Status = "Success",
+            Token = GenerateJwtToken(user),
+            StatusCode = 200,
+            UserName = user.UserName,
+            UserRole = user.RoleUser,
+            ID = user.Id
         };
     }
 
@@ -87,19 +111,58 @@ public class AuthenticationService : IAuthentication
         {
             x.Email,
             x.UserName,
-            x.EmailConfirmed
+            x.EmailConfirmed,
+            x.Name,
+            x.RoleUser,
+            x.Id,
+            x.PhoneNumber
         }).ToListAsync();
 
-        //either
         var userDetails = from userData in users
             select new UserDetailsDto()
             {
                 Email = userData.Email,
                 UserName = userData.UserName,
-                IsEmailConfirmed = userData.EmailConfirmed
+                IsEmailConfirmed = userData.EmailConfirmed,
+                Name = userData.Name,
+                RoleUser = userData.RoleUser,
+                Id = userData.Id,
+                PhoneNumber = userData.PhoneNumber
             };
         return userDetails;
     }
+
+    public async Task<UserDetailsDto> GetSingleUser(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        var userDetails = new UserDetailsDto()
+        {
+            Email = user.Email,
+            UserName = user.UserName,
+            Name = user.Name,
+            RoleUser = user.RoleUser,
+            Id = user.Id,
+            IsEmailConfirmed = user.EmailConfirmed,
+            PhoneNumber = user.PhoneNumber
+        };
+        return userDetails;
+    }
+
+    // public async Task<UserDetailsDto> GetOneUser(Guid id)
+    // {
+    //     var userData = await _dbContext.AddUser.FindAsync(id);
+    //     var result = new UserDetailsDto()
+    //     {
+    //         Id = userData!.Id,
+    //         Name = userData.Name,
+    //         UserName = userData.UserName,
+    //         PhoneNumber = userData.PhoneNumber,
+    //         Email = userData.Email,
+    //         IsEmailConfirmed = userData.EmailConfirmed,
+    //         RoleUser = userData.RoleUser
+    //     };
+    //     return result;
+    // }
 
     // JWT
     private string GenerateJwtToken(IdentityUser user)

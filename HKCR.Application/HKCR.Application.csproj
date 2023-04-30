@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
     </ItemGroup>
     
     <ItemGroup>
-        <ProjectReference Include="..\HKCR.Domain\HKCR.Domain.csproj"/>
+        <ProjectReference Include="..\HKCR.Domain\HKCR.Domain.csproj" />
     </ItemGroup>
 
 </Project>

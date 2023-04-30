@@ -4,11 +4,10 @@ using HKCR.Domain.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Xml;
 
 namespace HKCR.Infra.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, string>, IApplicationDbContext
 {
     private readonly IDateTime _dateTime;
 
@@ -25,6 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
     public DbSet<DamageRequest> DamageRequest { get; set; }
 
     public DbSet<Payment> Payment { get; set; }
+    public DbSet<AddUser> AddUser { get; set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -41,6 +41,14 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
                 case EntityState.Modified:
                     entry.Entity.LastModifiedTime = _dateTime.Now;
                     break;
+                case EntityState.Detached:
+                    break;
+                case EntityState.Unchanged:
+                    break;
+                case EntityState.Deleted:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -48,16 +56,16 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
 
         return result;
     }
-    
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<AddUser>().HasKey(u => u.Id);
         builder.Entity<Cars>().HasKey(c => c.CarID);
         builder.Entity<Document>().HasKey(d => d.DocID);
         builder.Entity<Payment>().HasKey(p => p.PaymentID);
-
-        builder.Entity<Rental>().HasKey(d => d.RentalID);
-        builder.Entity<Offers>().HasKey(d => d.OfferID);
+        builder.Entity<Rental>().HasKey(r => r.RentalID);
+        builder.Entity<Offers>().HasKey(o => o.OfferID);
         builder.Entity<DamageRequest>().HasKey(da => da.DamageId);
 
         // Configure the foreign key between User and Document entities
@@ -66,7 +74,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
             .WithMany()
             .HasForeignKey(u => u.DocId)
             .OnDelete(DeleteBehavior.SetNull);
-        
+
         // Configure the foreign key between Rental and Car entities
         builder.Entity<Rental>()
             .HasOne(u => u.Car)
@@ -104,17 +112,17 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
 
         // Configure the foreign key between Payment and Offer entities
         builder.Entity<Payment>()
-           .HasOne(u => u.Offers)
-           .WithMany()
-           .HasForeignKey(u => u.OfferID)
-           .OnDelete(DeleteBehavior.SetNull);
+            .HasOne(u => u.Offers)
+            .WithMany()
+            .HasForeignKey(u => u.OfferID)
+            .OnDelete(DeleteBehavior.SetNull);
 
         // Configure the foreign key between Payment and Rental entities
         builder.Entity<Payment>()
-           .HasOne(u => u.Rental)
-           .WithMany()
-           .HasForeignKey(u => u.RentalID)
-           .OnDelete(DeleteBehavior.SetNull);
+            .HasOne(u => u.Rental)
+            .WithMany()
+            .HasForeignKey(u => u.RentalID)
+            .OnDelete(DeleteBehavior.SetNull);
 
         var ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
         var ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";
@@ -130,22 +138,24 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole
         });
 
         //create user
-        var appUser = new IdentityUser()
+        var appUser = new AddUser()
         {
             Id = ADMIN_ID,
             Email = "admin@hajur.com",
+            Name = "Admin BSDK",
             EmailConfirmed = true,
-            UserName = "Hajur Ko Admin",
+            UserName = "Admin",
             NormalizedEmail = "ADMIN@HAJUR.COM",
-            NormalizedUserName = "HAJUR KO ADMIN"
+            NormalizedUserName = "ADMIN",
+            RoleUser = "admin"
         };
 
         //set user password
-        var ph = new PasswordHasher<IdentityUser>();
-        appUser.PasswordHash = ph.HashPassword(appUser, "Admin_12!");
+        var ph = new PasswordHasher<AddUser>();
+        appUser.PasswordHash = ph.HashPassword(appUser, "admin");
 
         //seed user
-        builder.Entity<IdentityUser>().HasData(appUser);
+        builder.Entity<AddUser>().HasData(appUser);
 
         //set user role to admin
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>

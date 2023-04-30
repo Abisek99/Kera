@@ -4,6 +4,9 @@ namespace HKCR.Application.Common.DTO;
 
 public class UserRegisterRequestDto
 {
+    [Required(ErrorMessage = "Name is required")]
+    public string? Name { get; set; }
+
     [Required(ErrorMessage = "User Name is required")]
     public string? Username { get; set; }
 
@@ -13,4 +16,9 @@ public class UserRegisterRequestDto
 
     [Required(ErrorMessage = "Password is required")]
     public string? Password { get; set; }
+
+    [Required(ErrorMessage = "Phone Number is required")]
+    public string? PhoneNumber { get; set; }
+
+    public string? RoleUser { get; set; }
 }

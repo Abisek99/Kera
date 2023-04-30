@@ -4,8 +4,10 @@ namespace HKCR.Application.Common.Interface;
 
 public interface IAuthentication
 {
-    Task<ResponseDto> Register(UserRegisterRequestDto model);
-    Task<ResponseDto> Login(UserLoginRequestDto model);
+    Task<AuthResponseDto> Register(UserRegisterRequestDto model);
+    Task<AuthResponseDto> Login(UserLoginRequestDto model);
     Task<ResponseDto> Logout();
     Task<IEnumerable<UserDetailsDto>> GetUserDetails();
+    Task<UserDetailsDto> GetSingleUser(string userName);
+    // Task<UserDetailsDto> GetOneUser(Guid id);
 }
