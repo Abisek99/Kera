@@ -34,6 +34,9 @@ namespace HKCR.Infra.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("DocId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -88,6 +91,8 @@ namespace HKCR.Infra.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DocId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -102,7 +107,7 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3cafba7d-4b79-41ac-98a6-c00abec98d96",
+                            ConcurrencyStamp = "7905f1e9-e8d0-4193-ad3d-80fd422ef8fe",
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
                             IsStaff = false,
@@ -110,11 +115,11 @@ namespace HKCR.Infra.Migrations
                             Name = "Admin BSDK",
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAWfvxRw04un/4sWMOnADNrLxi63H0wuMWJRS198Pc3TTNZRTpZZv7Ras9VwcIQg3A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGEUeV7ADTDwe+TniQx8ZUN7RCwVPZNW487+bXAgLTSr/ONAWK2g+SuHV0kib0JgZw==",
                             PhoneNumberConfirmed = false,
                             Profile = "/public/images/uploads/user.jpg",
                             RoleUser = "admin",
-                            SecurityStamp = "71539791-342d-4b0e-9b9f-34eba2b7f25c",
+                            SecurityStamp = "72f40a86-59c0-4728-a352-a24ffe90333d",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -249,8 +254,9 @@ namespace HKCR.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("DocType")
-                        .HasColumnType("integer");
+                    b.Property<string>("DocType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("DocID");
 
@@ -384,7 +390,6 @@ namespace HKCR.Infra.Migrations
                         .HasColumnType("text");
 
                     b.Property<Guid?>("DocId")
-                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -561,6 +566,16 @@ namespace HKCR.Infra.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("HKCR.Domain.Entities.AddUser", b =>
+                {
+                    b.HasOne("HKCR.Domain.Entities.Document", "Document")
+                        .WithMany("AddUsers")
+                        .HasForeignKey("DocId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Document");
+                });
+
             modelBuilder.Entity("HKCR.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("HKCR.Domain.Entities.User", "User")
@@ -641,9 +656,7 @@ namespace HKCR.Infra.Migrations
                 {
                     b.HasOne("HKCR.Domain.Entities.Document", "Document")
                         .WithMany()
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .HasForeignKey("DocId");
 
                     b.Navigation("Document");
                 });
@@ -697,6 +710,11 @@ namespace HKCR.Infra.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HKCR.Domain.Entities.Document", b =>
+                {
+                    b.Navigation("AddUsers");
                 });
 #pragma warning restore 612, 618
         }

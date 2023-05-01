@@ -69,17 +69,17 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
         builder.Entity<DamageRequest>().HasKey(da => da.DamageId);
 
         // Configure the foreign key between User and Document entities
-        // builder.Entity<AddUser>()
-        //     .HasOne(u => u.Document)
-        //     .WithMany()
-        //     .HasForeignKey(u => u.DocId)
-        //     .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<AddUser>()
+            .HasOne(u => u.Document)
+            .WithMany(a=>a.AddUsers)
+            .HasForeignKey(u => u.DocId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // One user to multiple docs
-        builder.Entity<AddUser>()
-            .HasOne<Document>(a => a.Document)
-            .WithMany(r => r.AddUsers)
-            .HasForeignKey(a => a.DocId);
+        // builder.Entity<AddUser>()
+        //     .HasOne<Document>(a => a.Document)
+        //     .WithMany(r => r.AddUsers)
+        //     .HasForeignKey(a => a.DocId);
 
         // Configure the foreign key between Rental and Car entities
         builder.Entity<Rental>()

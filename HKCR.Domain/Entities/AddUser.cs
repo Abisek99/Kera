@@ -13,5 +13,5 @@ public class AddUser : IdentityUser
     public string? Profile { get; set; } = "/public/images/uploads/user.jpg";
 
     [ForeignKey("Document")] public Guid? DocId { get; set; }
-    public virtual Document Document { get; set; }
+    public virtual Document? Document { get; set; }
 }
