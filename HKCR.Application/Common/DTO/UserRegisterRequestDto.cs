@@ -21,4 +21,5 @@ public class UserRegisterRequestDto
     public string? PhoneNumber { get; set; }
 
     public string? RoleUser { get; set; }
+    public Guid? DocId { get; set; }
 }

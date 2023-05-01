@@ -44,7 +44,8 @@ public class AuthenticationService : IAuthentication
             RoleUser = model.RoleUser,
             PhoneNumber = model.PhoneNumber,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.Username
+            UserName = model.Username,
+            DocId = model.DocId
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
@@ -61,10 +62,11 @@ public class AuthenticationService : IAuthentication
         {
             Status = "Success",
             Message = "User created successfully!",
-            Token = GenerateJwtToken(oneUser),
-            UserName = oneUser.UserName,
+            UserName = oneUser!.UserName,
             StatusCode = 201,
-            UserRole = oneUser.RoleUser
+            Token = GenerateJwtToken(oneUser),
+            UserRole = oneUser.RoleUser,
+            DocId = oneUser.DocId.ToString()
         };
     }
 
@@ -194,23 +196,6 @@ public class AuthenticationService : IAuthentication
         };
         return userDetails;
     }
-
-
-    // public async Task<UserDetailsDto> GetOneUser(Guid id)
-    // {
-    //     var userData = await _dbContext.AddUser.FindAsync(id);
-    //     var result = new UserDetailsDto()
-    //     {
-    //         Id = userData!.Id,
-    //         Name = userData.Name,
-    //         UserName = userData.UserName,
-    //         PhoneNumber = userData.PhoneNumber,
-    //         Email = userData.Email,
-    //         IsEmailConfirmed = userData.EmailConfirmed,
-    //         RoleUser = userData.RoleUser
-    //     };
-    //     return result;
-    // }
 
     // JWT
     private string GenerateJwtToken(IdentityUser user)

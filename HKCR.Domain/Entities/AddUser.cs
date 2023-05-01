@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace HKCR.Domain.Entities;
@@ -10,5 +11,7 @@ public class AddUser : IdentityUser
     public string? RoleUser { get; set; } = "user";
 
     public string? Profile { get; set; } = "/public/images/uploads/user.jpg";
-    // public IEnumerable<IdentityRole> Roles { get; set; } = Enumerable.Empty<IdentityRole>();
+
+    [ForeignKey("Document")] public Guid? DocId { get; set; }
+    public virtual Document Document { get; set; }
 }

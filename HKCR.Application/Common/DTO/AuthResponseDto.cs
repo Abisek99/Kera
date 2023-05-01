@@ -9,4 +9,5 @@ public class AuthResponseDto
     public int StatusCode { get; set; }
     public string? UserRole { get; set; }
     public string? ID { get; set; }
+    public string? DocId { get; set; }
 }

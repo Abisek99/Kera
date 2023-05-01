@@ -7,5 +7,5 @@ public interface IDocDetails
 {
     Task<List<DocResponseDto>> GetAllDocsAsync();
     Task<List<DocResponseDto>> GetAllDocs();
-    Task<DocResponseDto> AddDocDetails(DocRequestDto car);
+    Task<DocResponseDto> AddDocDetails(DocRequestDto doc);
 }

@@ -16,15 +16,15 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
         _dateTime = dateTime;
     }
 
-    public DbSet<User> User { get; set; }
-    public DbSet<Cars> Cars { get; set; }
+    public DbSet<AddUser> AddUsers { get; set; }
     public DbSet<Document> Document { get; set; }
+    public DbSet<Cars> Cars { get; set; }
+    public DbSet<User> User { get; set; }
     public DbSet<Rental> Rental { get; set; }
     public DbSet<Offers> Offers { get; set; }
     public DbSet<DamageRequest> DamageRequest { get; set; }
 
     public DbSet<Payment> Payment { get; set; }
-    public DbSet<AddUser> AddUser { get; set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -69,11 +69,17 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
         builder.Entity<DamageRequest>().HasKey(da => da.DamageId);
 
         // Configure the foreign key between User and Document entities
-        builder.Entity<User>()
-            .HasOne(u => u.Document)
-            .WithMany()
-            .HasForeignKey(u => u.DocId)
-            .OnDelete(DeleteBehavior.SetNull);
+        // builder.Entity<AddUser>()
+        //     .HasOne(u => u.Document)
+        //     .WithMany()
+        //     .HasForeignKey(u => u.DocId)
+        //     .OnDelete(DeleteBehavior.Cascade);
+
+        // One user to multiple docs
+        builder.Entity<AddUser>()
+            .HasOne<Document>(a => a.Document)
+            .WithMany(r => r.AddUsers)
+            .HasForeignKey(a => a.DocId);
 
         // Configure the foreign key between Rental and Car entities
         builder.Entity<Rental>()

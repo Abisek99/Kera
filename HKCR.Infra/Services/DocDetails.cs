@@ -33,9 +33,16 @@ public class DocDetails : IDocDetails
     }
 
 
-    public Task<List<DocResponseDto>> GetAllDocsAsync()
+    public async Task<List<DocResponseDto>> GetAllDocsAsync()
     {
-        throw new NotImplementedException();
+        var data = (from docData in _dbContext.Document
+            select new DocResponseDto()
+            {
+                DocId = docData.DocID,
+                DocType = docData.DocType,
+                DocImage = docData.DocImage
+            }).ToList();
+        return data;
     }
 
     public Task<List<DocResponseDto>> GetAllDocs()

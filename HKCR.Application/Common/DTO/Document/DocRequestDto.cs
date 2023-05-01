@@ -4,6 +4,6 @@ namespace HKCR.Application.Common.DTO.Document;
 
 public class DocRequestDto
 {
-    public DocumentType DocType { get; set; }
+    public string DocType { get; set; }
     public string DocImage { get; set; }
 }

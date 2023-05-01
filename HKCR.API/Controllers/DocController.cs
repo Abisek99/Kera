@@ -17,7 +17,7 @@ public class DocController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/api/v1/docs")]
+    [Route("/api/v1/user/docs")]
     public async Task<List<DocResponseDto>> GetAllDocDetails()
     {
         var data = await _docDetails.GetAllDocsAsync();
@@ -25,7 +25,7 @@ public class DocController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/api/v1/docs")]
+    [Route("/api/v1/user/docs")]
     public async Task<DocResponseDto> AddDocDetails(DocRequestDto doc)
     {
         var data = await _docDetails.AddDocDetails(doc);
