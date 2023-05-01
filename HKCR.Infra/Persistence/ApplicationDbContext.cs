@@ -144,7 +144,7 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
             Email = "admin@hajur.com",
             Name = "Admin BSDK",
             EmailConfirmed = true,
-            UserName = "Admin",
+            UserName = "admin",
             NormalizedEmail = "ADMIN@HAJUR.COM",
             NormalizedUserName = "ADMIN",
             RoleUser = "admin"

@@ -13,18 +13,16 @@ namespace HKCR.Infra.Services;
 
 public class AuthenticationService : IAuthentication
 {
-    private readonly UserManager<AddUser> _userManager;
+    private readonly UserManager<AddUser?> _userManager;
     private readonly SignInManager<AddUser> _signInManager;
     private readonly IConfiguration _configuration;
-    private readonly IApplicationDbContext _dbContext;
 
-    public AuthenticationService(UserManager<AddUser> userManager, SignInManager<AddUser> signInManager,
-        IConfiguration configuration, IApplicationDbContext dbContext)
+    public AuthenticationService(UserManager<AddUser?> userManager, SignInManager<AddUser> signInManager,
+        IConfiguration configuration)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
-        _dbContext = dbContext;
     }
 
     public async Task<AuthResponseDto> Register(UserRegisterRequestDto model)
@@ -38,7 +36,7 @@ public class AuthenticationService : IAuthentication
             model.RoleUser = "user";
         }
 
-        AddUser user = new()
+        AddUser? user = new()
         {
             Name = model.Name,
             IsStaff = false,
@@ -67,6 +65,52 @@ public class AuthenticationService : IAuthentication
             UserName = oneUser.UserName,
             StatusCode = 201,
             UserRole = oneUser.RoleUser
+        };
+    }
+
+    public async Task<AuthResponseDto> DeleteUser(string userName)
+    {
+        var userExists = await _userManager.FindByNameAsync(userName);
+        if (userExists == null)
+            return new AuthResponseDto() { Status = "Error", Message = "User does not exist!", StatusCode = 401 };
+        if (userExists.RoleUser == "admin")
+        {
+            return new AuthResponseDto()
+                { Status = "Error", Message = "Cannot delete Admin You Psycho Bitch", StatusCode = 500 };
+        }
+
+        await _userManager.DeleteAsync(userExists);
+        return new AuthResponseDto()
+        {
+            Status = "Success",
+            Message = $"User {userExists.UserName} Deleted Successfully",
+            StatusCode = 200
+        };
+    }
+
+    public async Task<AuthResponseDto> ChangePassword(ChangePasswordReqDto model)
+    {
+        var userExists = await _userManager.FindByNameAsync(model.Username);
+        if (userExists == null)
+            return new AuthResponseDto() { Status = "Error", Message = "User does not exist!", StatusCode = 401 };
+
+        var validPassword = await _userManager.CheckPasswordAsync(userExists, model.CurrentPassword);
+        if (!validPassword)
+        {
+            return new AuthResponseDto()
+            {
+                Status = "Error", Message = "Current Password does not match!", StatusCode = 401
+            };
+        }
+
+        await _userManager.ChangePasswordAsync(userExists, model.CurrentPassword, model.NewPassword);
+        return new AuthResponseDto()
+        {
+            Status = "Success",
+            Message = $"Password of {userExists.UserName} Changed Successfully",
+            StatusCode = 200,
+            ID = userExists.Id,
+            Token = GenerateJwtToken(userExists)
         };
     }
 
@@ -115,7 +159,8 @@ public class AuthenticationService : IAuthentication
             x.Name,
             x.RoleUser,
             x.Id,
-            x.PhoneNumber
+            x.PhoneNumber,
+            x.PhoneNumberConfirmed
         }).ToListAsync();
 
         var userDetails = from userData in users
@@ -127,7 +172,8 @@ public class AuthenticationService : IAuthentication
                 Name = userData.Name,
                 RoleUser = userData.RoleUser,
                 Id = userData.Id,
-                PhoneNumber = userData.PhoneNumber
+                PhoneNumber = userData.PhoneNumber,
+                IsPhoneNumberConfirmed = userData.PhoneNumberConfirmed
             };
         return userDetails;
     }
@@ -143,10 +189,12 @@ public class AuthenticationService : IAuthentication
             RoleUser = user.RoleUser,
             Id = user.Id,
             IsEmailConfirmed = user.EmailConfirmed,
-            PhoneNumber = user.PhoneNumber
+            PhoneNumber = user.PhoneNumber,
+            IsPhoneNumberConfirmed = user.PhoneNumberConfirmed
         };
         return userDetails;
     }
+
 
     // public async Task<UserDetailsDto> GetOneUser(Guid id)
     // {

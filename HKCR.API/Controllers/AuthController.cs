@@ -31,14 +31,6 @@ public class AuthController : ControllerBase
         return result;
     }
 
-    // [HttpGet]
-    // [Route("/api/v1/auth/getOneUser/{id}")]
-    // public async Task<UserDetailsDto> GetOneUser(Guid id)
-    // {
-    //     var result = await _authenticationManager.GetOneUser(id);
-    //     return result;
-    // }
-
     [HttpPost]
     [Route("/api/v1/auth/register")]
     public async Task<AuthResponseDto> Register([FromBody] UserRegisterRequestDto model)
@@ -56,11 +48,27 @@ public class AuthController : ControllerBase
         return result;
     }
 
+    [HttpPatch]
+    [Route("/api/v1/auth/changePassword")]
+    public async Task<AuthResponseDto> ChangePassword([FromBody] ChangePasswordReqDto model)
+    {
+        var result = await _authenticationManager.ChangePassword(model);
+        return result;
+    }
+
     [HttpGet]
     [Route("/api/v1/auth/logout")]
     public async Task<ResponseDto> Logout()
     {
         var result = await _authenticationManager.Logout();
+        return result;
+    }
+
+    [HttpDelete]
+    [Route("/api/v1/auth/deleteUser")]
+    public async Task<AuthResponseDto> DeleteUser(string username)
+    {
+        var result = await _authenticationManager.DeleteUser(username);
         return result;
     }
 }

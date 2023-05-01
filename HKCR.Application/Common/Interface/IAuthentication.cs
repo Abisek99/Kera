@@ -9,5 +9,6 @@ public interface IAuthentication
     Task<ResponseDto> Logout();
     Task<IEnumerable<UserDetailsDto>> GetUserDetails();
     Task<UserDetailsDto> GetSingleUser(string userName);
-    // Task<UserDetailsDto> GetOneUser(Guid id);
+    Task<AuthResponseDto> DeleteUser(string userName);
+    Task<AuthResponseDto> ChangePassword(ChangePasswordReqDto model);
 }
