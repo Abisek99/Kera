@@ -71,7 +71,7 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
         // Configure the foreign key between User and Document entities
         builder.Entity<AddUser>()
             .HasOne(u => u.Document)
-            .WithMany(a=>a.AddUsers)
+            .WithMany(a => a.AddUsers)
             .HasForeignKey(u => u.DocId)
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -132,6 +132,8 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
 
         var ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
         var ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";
+        Guid DOC_ID = new Guid("72eb3a74-5ff1-48b0-8b66-f08de1177332");
+        var DOCs_ID = new Guid();
 
 
         //seed admin role
@@ -153,7 +155,14 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
             UserName = "admin",
             NormalizedEmail = "ADMIN@HAJUR.COM",
             NormalizedUserName = "ADMIN",
-            RoleUser = "admin"
+            RoleUser = "admin",
+            DocId = DOC_ID
+        };
+        var doc = new Document()
+        {
+            DocID = DOC_ID,
+            DocType = "License",
+            DocImage = "Not Available",
         };
 
         //set user password
@@ -162,6 +171,7 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
 
         //seed user
         builder.Entity<AddUser>().HasData(appUser);
+        builder.Entity<Document>().HasData(doc);
 
         //set user role to admin
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>

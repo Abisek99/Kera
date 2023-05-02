@@ -13,6 +13,7 @@ public class DocDetails : IDocDetails
         _dbContext = dbContext;
     }
 
+
     public async Task<DocResponseDto> AddDocDetails(DocRequestDto doc)
     {
         var docDetails = new Document()
@@ -46,26 +47,45 @@ public class DocDetails : IDocDetails
         return data;
     }
 
+
     // Get Single Car
-    // public Task<List<CarResponseDto>> GetSingleCarAsync(Guid prodId)
-    // {
-    //     var data = (from empData in _dbContext.Cars
-    //         where empData.CarID.Equals(prodId)
-    //         select new CarResponseDto()
-    //         {
-    //             CarID = empData.CarID,
-    //             CarName = empData.CarName,
-    //             CarBrand = empData.CarBrand,
-    //             CarModel = empData.CarModel,
-    //             CarColor = empData.CarColor,
-    //             CarRentalRate = empData.CarRentalRate,
-    //             CarAvailability = empData.CarAvailability,
-    //             CarNoOfRent = empData.CarNoOfRent,
-    //             CarLastRented = empData.CarLastRented,
-    //             CarImage = empData.CarImage
-    //         }).ToList();
-    //     return Task.FromResult(data);
-    // }
+    public async Task<DocUserResDto?> GetSingleDoc(Guid id)
+    {
+        var doc = await _dbContext.Document.FindAsync(id);
+        if (doc == null)
+        {
+            return new DocUserResDto()
+            {
+                Status = "Error",
+                Message = "Document Not Found"
+            };
+        }
+
+        var data = new DocUserResDto()
+        {
+            Status = "Success",
+            Message = "Document Fetched Successfully",
+            DocId = doc.DocID.ToString(),
+            DocImage = doc.DocImage,
+            DocType = doc.DocType
+        };
+
+        // var data = (from d in _dbContext.Document
+        //     join docUser in _dbContext.AddUsers on d.DocID equals id
+        //     select new DocUserResDto()
+        //     {
+        //         DocId = d.DocID.ToString(),
+        //         DocImage = d.DocImage,
+        //         DocType = d.DocType,
+        //         UserId = docUser.Id,
+        //         Name = docUser.Name,
+        //         UserEmail = docUser.Email,
+        //         UserRole = docUser.RoleUser
+        //     }).FirstOrDefault();
+
+        return data;
+    }
+
 
     public Task<List<DocResponseDto>> GetAllDocs()
     {

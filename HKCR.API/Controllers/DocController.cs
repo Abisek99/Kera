@@ -24,6 +24,14 @@ public class DocController : ControllerBase
         return data;
     }
 
+    [HttpGet]
+    [Route("/api/v1/user/docs/getOne/{id}")]
+    public async Task<DocUserResDto?> GetSingleDoc(Guid id)
+    {
+        var data = await _docDetails.GetSingleDoc(id);
+        return data;
+    }
+
     [HttpPost]
     [Route("/api/v1/user/docs")]
     public async Task<DocResponseDto> AddDocDetails(DocRequestDto doc)

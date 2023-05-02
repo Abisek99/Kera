@@ -16,13 +16,15 @@ public class AuthenticationService : IAuthentication
     private readonly UserManager<AddUser?> _userManager;
     private readonly SignInManager<AddUser> _signInManager;
     private readonly IConfiguration _configuration;
+    private readonly IApplicationDbContext _dbContext;
 
     public AuthenticationService(UserManager<AddUser?> userManager, SignInManager<AddUser> signInManager,
-        IConfiguration configuration)
+        IConfiguration configuration, IApplicationDbContext dbContext)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
+        _dbContext = dbContext;
     }
 
     public async Task<AuthResponseDto> Register(UserRegisterRequestDto model)
@@ -155,17 +157,20 @@ public class AuthenticationService : IAuthentication
     {
         var users = await _userManager.Users.Select(x => new
         {
-            x.Email,
+            x!.Email,
             x.UserName,
             x.EmailConfirmed,
             x.Name,
             x.RoleUser,
             x.Id,
             x.PhoneNumber,
-            x.PhoneNumberConfirmed
+            x.PhoneNumberConfirmed,
+            x.DocId
         }).ToListAsync();
 
         var userDetails = from userData in users
+            join d in _dbContext.Document
+                on userData.DocId equals d.DocID
             select new UserDetailsDto()
             {
                 Email = userData.Email,
@@ -175,7 +180,10 @@ public class AuthenticationService : IAuthentication
                 RoleUser = userData.RoleUser,
                 Id = userData.Id,
                 PhoneNumber = userData.PhoneNumber,
-                IsPhoneNumberConfirmed = userData.PhoneNumberConfirmed
+                IsPhoneNumberConfirmed = userData.PhoneNumberConfirmed,
+                DocId = userData.DocId.ToString(),
+                DocType = d.DocType,
+                DocImage = d.DocImage
             };
         return userDetails;
     }
@@ -183,6 +191,11 @@ public class AuthenticationService : IAuthentication
     public async Task<UserDetailsDto> GetSingleUser(string username)
     {
         var user = await _userManager.FindByNameAsync(username);
+        if (user == null) {
+            throw new Exception($"User '{username}' not found.");
+        }
+        var userDoc = await _dbContext.Document.FindAsync(user.DocId);
+
         var userDetails = new UserDetailsDto()
         {
             Email = user.Email,
@@ -192,8 +205,12 @@ public class AuthenticationService : IAuthentication
             Id = user.Id,
             IsEmailConfirmed = user.EmailConfirmed,
             PhoneNumber = user.PhoneNumber,
-            IsPhoneNumberConfirmed = user.PhoneNumberConfirmed
+            IsPhoneNumberConfirmed = user.PhoneNumberConfirmed,
+            DocId = user.DocId.ToString(),
+            DocImage = userDoc.DocImage ?? "No Image",
+            DocType = userDoc.DocType ?? "No Idea"
         };
+        // var userDocument = 
         return userDetails;
     }
 

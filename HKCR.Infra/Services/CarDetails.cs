@@ -182,18 +182,6 @@ namespace HKCR.Infra.Services
                     CarLastRented = empData.CarLastRented,
                     CarImage = empData.CarImage
                 }).ToList();
-
-
-            // join depart in _dbContext.Department
-            //     on empData.DepartmentId equals depart.Id
-            // select new EmployeeResponseDTO()
-            // {
-            //     DepartmentName = depart.Name,
-            //     Designation = empData.Designation,
-            //     Salary = empData.Salary
-            // }).ToList();
-
-
             return Task.FromResult(data);
         }
     }

@@ -10,4 +10,6 @@ public class AuthResponseDto
     public string? UserRole { get; set; }
     public string? ID { get; set; }
     public string? DocId { get; set; }
+    public string? DocImage { get; set; }
+    public string? DocType { get; set; }
 }
