@@ -107,7 +107,7 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "718cf03f-b3a8-4286-a7ff-2178704cee38",
+                            ConcurrencyStamp = "b7b03cfb-ddf6-47c5-877a-e1824963cb66",
                             DocId = new Guid("72eb3a74-5ff1-48b0-8b66-f08de1177332"),
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
@@ -116,11 +116,11 @@ namespace HKCR.Infra.Migrations
                             Name = "Admin BSDK",
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEv4m5ajqNB72j2AgCGFwsC/jZYoBvj4RHcPNJTpqb/mU3CAKCC9lGVDKBZYCM5aTA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDAfZujuz3bJo7Y5k92sg3CttTK3/4ICZMudQ5L1jJN7cV9vqwDS0UcnNBJSsvgIXA==",
                             PhoneNumberConfirmed = false,
                             Profile = "/public/images/uploads/user.jpg",
                             RoleUser = "admin",
-                            SecurityStamp = "06e531bd-4bb6-4941-94cc-47abd2a79192",
+                            SecurityStamp = "b081699f-5e5e-41bb-a58c-09ed208385c6",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -190,55 +190,36 @@ namespace HKCR.Infra.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("HKCR.Domain.Entities.Customer", b =>
-                {
-                    b.Property<Guid>("CustomerID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CustomerDiscount")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("CustomerID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Customer");
-                });
-
             modelBuilder.Entity("HKCR.Domain.Entities.DamageRequest", b =>
                 {
-                    b.Property<Guid>("DamageId")
+                    b.Property<Guid?>("DamageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("AddUserId")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("DamageDate")
+                    b.Property<DateTime?>("DamageDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DamageDescription")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DamageStatus")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("RentalId")
+                    b.Property<string>("DamagedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("RentalId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("RepairBill")
+                    b.Property<int?>("RepairBill")
                         .HasColumnType("integer");
 
                     b.HasKey("DamageId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("AddUserId");
 
                     b.HasIndex("RentalId");
 
@@ -600,32 +581,19 @@ namespace HKCR.Infra.Migrations
                     b.Navigation("Document");
                 });
 
-            modelBuilder.Entity("HKCR.Domain.Entities.Customer", b =>
-                {
-                    b.HasOne("HKCR.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("HKCR.Domain.Entities.DamageRequest", b =>
                 {
-                    b.HasOne("HKCR.Domain.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                    b.HasOne("HKCR.Domain.Entities.AddUser", "AddUser")
+                        .WithMany("DamageRequests")
+                        .HasForeignKey("AddUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("HKCR.Domain.Entities.RentalRequest", "RentalRequest")
-                        .WithMany()
+                        .WithMany("DamageRequests")
                         .HasForeignKey("RentalId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Navigation("Customer");
+                    b.Navigation("AddUser");
 
                     b.Navigation("RentalRequest");
                 });
@@ -746,6 +714,8 @@ namespace HKCR.Infra.Migrations
 
             modelBuilder.Entity("HKCR.Domain.Entities.AddUser", b =>
                 {
+                    b.Navigation("DamageRequests");
+
                     b.Navigation("Rent");
 
                     b.Navigation("Rentals");
@@ -759,6 +729,11 @@ namespace HKCR.Infra.Migrations
             modelBuilder.Entity("HKCR.Domain.Entities.Document", b =>
                 {
                     b.Navigation("AddUsers");
+                });
+
+            modelBuilder.Entity("HKCR.Domain.Entities.RentalRequest", b =>
+                {
+                    b.Navigation("DamageRequests");
                 });
 #pragma warning restore 612, 618
         }

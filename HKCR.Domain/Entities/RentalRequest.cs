@@ -17,5 +17,8 @@ namespace HKCR.Domain.Entities
 
         [ForeignKey("AddUser")] public string? AddUserId { get; set; }
         public virtual AddUser AddUser { get; set; }
+        
+        public ICollection<DamageRequest> DamageRequests { get; set; }
+
     }
 }

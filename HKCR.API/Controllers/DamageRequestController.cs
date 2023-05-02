@@ -17,16 +17,23 @@ namespace HKCR.API.Controllers
         }
 
         [HttpGet]
-        [Route("/api/v1/damagerequests")]
-        public async Task<List<DamageResDto>> GetAllDamageRequestDetails()
+        [Route("/api/v1/damageRequests")]
+        public async Task<List<DamageResDto>> GetAllDamageRequestDetailsAsync()
         {
             var data = await _damageRequestDetails.GetAllDamageRequestDetailsAsync();
+            return data;
+        }   
+        [HttpGet]
+        [Route("/api/v1/damageRequest")]
+        public async Task<List<DamageResDto>> GetAllDamageRequestDetails()
+        {
+            var data = await _damageRequestDetails.GetAllDamageRequestDetails();
             return data;
         }
 
         [HttpPost]
-        [Route("/api/v1/damagerequests")]
-        public async Task<DamageResDto> AddDamageRequestDetails(DamageReqDto damageRequest)
+        [Route("/api/v1/damageRequests")]
+        public async Task<DamageResDto?> AddDamageRequestDetails(DamageReqDto damageRequest)
         {
             var data = await _damageRequestDetails.AddDamageRequestDetails(damageRequest);
             return data;

@@ -100,15 +100,15 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
 
         // Configure the foreign key between DamageRequest and Customer entities
         builder.Entity<DamageRequest>()
-            .HasOne(u => u.Customer)
-            .WithMany()
-            .HasForeignKey(u => u.CustomerId)
+            .HasOne(u => u.AddUser)
+            .WithMany(f => f.DamageRequests)
+            .HasForeignKey(u => u.AddUserId)
             .OnDelete(DeleteBehavior.SetNull);
 
         // Configure the foreign key between DamageRequest and Rental entities
         builder.Entity<DamageRequest>()
             .HasOne(u => u.RentalRequest)
-            .WithMany()
+            .WithMany(f => f.DamageRequests)
             .HasForeignKey(u => u.RentalId)
             .OnDelete(DeleteBehavior.SetNull);
 
@@ -126,6 +126,7 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
             .WithMany()
             .HasForeignKey(u => u.RentalID)
             .OnDelete(DeleteBehavior.SetNull);
+
 
         var ADMIN_ID = "02174cf0–9412–4cfe-afbf-59f706d72cf6";
         var ROLE_ID = "341743f0-asd2–42de-afbf-59kmkkmk72cf6";

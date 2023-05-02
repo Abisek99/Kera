@@ -10,13 +10,12 @@ namespace HKCR.Application.Common.DTO.DamageRequest
 {
     public class DamageReqDto
     {
-        public string DamageDescription { get; set; }
-        public DateTime DamageDate { get; set; }
-        public string DamageStatus { get; set; }
-        public int RepairBill { get; set; }
-
-        public Guid CustomerId { get; set; }
-
-        public Guid RentalId { get; set; }
+        public string? DamageDescription { get; set; }
+        public DateTime? DamageDate { get; set; }
+        public string? DamageStatus { get; set; }
+        public int? RepairBill { get; set; }
+        public string? DamagedBy { get; set; }
+        public string? AddUserId { get; set; }
+        public Guid? RentalId { get; set; }
     }
 }

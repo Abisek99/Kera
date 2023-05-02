@@ -17,4 +17,8 @@ public class Rent
 
     [ForeignKey("AddUser")] public string? ApprovedBy { get; set; }
     public virtual AddUser AddUser { get; set; }
+
+
+
+
 }

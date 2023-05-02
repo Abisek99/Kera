@@ -12,6 +12,6 @@ namespace HKCR.Application.Common.Interface
     {
         Task<List<DamageResDto>> GetAllDamageRequestDetailsAsync();
         Task<List<DamageResDto>> GetAllDamageRequestDetails();
-        Task<DamageResDto> AddDamageRequestDetails(DamageReqDto damageRequestDetails);
+        Task<DamageResDto?> AddDamageRequestDetails(DamageReqDto damageRequestDetails);
     }
 }

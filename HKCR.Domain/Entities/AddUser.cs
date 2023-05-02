@@ -16,4 +16,5 @@ public class AddUser : IdentityUser
     public virtual Document? Document { get; set; }
     public ICollection<RentalRequest> Rentals { get; set; }
     public ICollection<Rent> Rent { get; set; }
+    public ICollection<DamageRequest> DamageRequests { get; set; }
 }
