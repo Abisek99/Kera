@@ -14,5 +14,6 @@ namespace HKCR.Domain.Entities
         public int? CarNoOfRent { get; set; }
         public DateTime? CarLastRented { get; set; }
         public string? CarImage { get; set; }
+        public ICollection<RentalRequest> Rentals { get; set; }
     }
 }

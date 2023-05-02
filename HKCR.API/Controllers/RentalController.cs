@@ -18,7 +18,7 @@ namespace HKCR.API.Controllers
 
         [HttpGet]
         [Route("/api/v1/rental")]
-        public async Task<List<RentalResponseDto>> GetAllCarDetails()
+        public async Task<List<RentalResponseDto>> GetAllRentalDetails()
         {
             var data = await _rentalDetails.GetAllRentalAsync();
             return data;

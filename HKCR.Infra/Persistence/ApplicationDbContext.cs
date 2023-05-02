@@ -20,7 +20,8 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
     public DbSet<Document> Document { get; set; }
     public DbSet<Cars> Cars { get; set; }
     public DbSet<User> User { get; set; }
-    public DbSet<Rental> Rental { get; set; }
+    public DbSet<RentalRequest> Rental { get; set; }
+    public DbSet<Rent> Rent { get; set; }
     public DbSet<Offers> Offers { get; set; }
     public DbSet<DamageRequest> DamageRequest { get; set; }
 
@@ -64,7 +65,8 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
         builder.Entity<Cars>().HasKey(c => c.CarID);
         builder.Entity<Document>().HasKey(d => d.DocID);
         builder.Entity<Payment>().HasKey(p => p.PaymentID);
-        builder.Entity<Rental>().HasKey(r => r.RentalID);
+        builder.Entity<RentalRequest>().HasKey(r => r.RentalId);
+        builder.Entity<Rent>().HasKey(r => r.RentId);
         builder.Entity<Offers>().HasKey(o => o.OfferID);
         builder.Entity<DamageRequest>().HasKey(da => da.DamageId);
 
@@ -75,32 +77,27 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
             .HasForeignKey(u => u.DocId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // One user to multiple docs
-        // builder.Entity<AddUser>()
-        //     .HasOne<Document>(a => a.Document)
-        //     .WithMany(r => r.AddUsers)
-        //     .HasForeignKey(a => a.DocId);
-
         // Configure the foreign key between Rental and Car entities
-        builder.Entity<Rental>()
+        builder.Entity<RentalRequest>()
             .HasOne(u => u.Car)
-            .WithMany()
+            .WithMany(a => a.Rentals)
             .HasForeignKey(u => u.CarID)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Configure the foreign key between Rental and Staff entities
-        builder.Entity<Rental>()
-            .HasOne(u => u.Staff)
-            .WithMany()
-            .HasForeignKey(u => u.StaffID)
+        // Configure the foreign key between Rental and Customer entities
+        builder.Entity<RentalRequest>()
+            .HasOne(u => u.AddUser)
+            .WithMany(a => a.Rentals)
+            .HasForeignKey(u => u.AddUserId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Configure the foreign key between Rental and Customer entities
-        builder.Entity<Rental>()
-            .HasOne(u => u.Customer)
-            .WithMany()
-            .HasForeignKey(u => u.CustomerID)
+        // Configure the foreign key between Rent and Staff entities
+        builder.Entity<Rent>()
+            .HasOne(u => u.AddUser)
+            .WithMany(s => s.Rent)
+            .HasForeignKey(u => u.ApprovedBy)
             .OnDelete(DeleteBehavior.SetNull);
+
         // Configure the foreign key between DamageRequest and Customer entities
         builder.Entity<DamageRequest>()
             .HasOne(u => u.Customer)
@@ -110,7 +107,7 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
 
         // Configure the foreign key between DamageRequest and Rental entities
         builder.Entity<DamageRequest>()
-            .HasOne(u => u.Rental)
+            .HasOne(u => u.RentalRequest)
             .WithMany()
             .HasForeignKey(u => u.RentalId)
             .OnDelete(DeleteBehavior.SetNull);
@@ -125,7 +122,7 @@ public class ApplicationDbContext : IdentityDbContext<AddUser, IdentityRole, str
 
         // Configure the foreign key between Payment and Rental entities
         builder.Entity<Payment>()
-            .HasOne(u => u.Rental)
+            .HasOne(u => u.RentalRequest)
             .WithMany()
             .HasForeignKey(u => u.RentalID)
             .OnDelete(DeleteBehavior.SetNull);

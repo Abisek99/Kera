@@ -17,6 +17,6 @@ namespace HKCR.Domain.Entities
 
         [ForeignKey("Rental")]
         public Guid RentalId { get; set; }
-        public virtual Rental Rental { get; set; }
+        public virtual RentalRequest RentalRequest { get; set; }
     }
 }

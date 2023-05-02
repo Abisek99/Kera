@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HKCR.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230502070444_ag")]
-    partial class ag
+    [Migration("20230502101134_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -109,7 +109,7 @@ namespace HKCR.Infra.Migrations
                         {
                             Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "87e41bfa-8472-46f0-ad9b-1af40a966800",
+                            ConcurrencyStamp = "b75f40fb-8c0b-45fc-98c3-aa63cd9f79f9",
                             DocId = new Guid("72eb3a74-5ff1-48b0-8b66-f08de1177332"),
                             Email = "admin@hajur.com",
                             EmailConfirmed = true,
@@ -118,11 +118,11 @@ namespace HKCR.Infra.Migrations
                             Name = "Admin BSDK",
                             NormalizedEmail = "ADMIN@HAJUR.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBB/uEgJe+DwK/7o/LqoJFVh7QmvITS1QuZicil8967aCeR1oGwMKlYT2oQTRljfbg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ+08kbvTPjRNsUjNnpJ8TfE1iJviqIQzqqKlIP5EjyunuzColnb5uuriGiKyufLBg==",
                             PhoneNumberConfirmed = false,
                             Profile = "/public/images/uploads/user.jpg",
                             RoleUser = "admin",
-                            SecurityStamp = "1acef37a-18e9-44e7-bbe4-5360a5a4b440",
+                            SecurityStamp = "22652afa-2b03-4b1f-a648-e93a656419cf",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -331,63 +331,41 @@ namespace HKCR.Infra.Migrations
                     b.ToTable("Payment");
                 });
 
-            modelBuilder.Entity("HKCR.Domain.Entities.Rental", b =>
+            modelBuilder.Entity("HKCR.Domain.Entities.RentalRequest", b =>
                 {
-                    b.Property<Guid>("RentalID")
+                    b.Property<Guid?>("RentalId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CarID")
-                        .HasColumnType("uuid");
+                    b.Property<string>("AddUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("CustomerID")
+                    b.Property<Guid?>("CarID")
                         .HasColumnType("uuid");
 
                     b.Property<string>("DamageStatus")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("RentalDate")
+                    b.Property<DateTime?>("RentalDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("RentalRequestDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("RentalStatus")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("StaffID")
-                        .HasColumnType("uuid");
+                    b.HasKey("RentalId");
 
-                    b.HasKey("RentalID");
+                    b.HasIndex("AddUserId");
 
                     b.HasIndex("CarID");
 
-                    b.HasIndex("CustomerID");
-
-                    b.HasIndex("StaffID");
-
                     b.ToTable("Rental");
-                });
-
-            modelBuilder.Entity("HKCR.Domain.Entities.Staff", b =>
-                {
-                    b.Property<Guid>("StaffID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("StaffEmail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("StaffPassword")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("StaffID");
-
-                    b.ToTable("Staff");
                 });
 
             modelBuilder.Entity("HKCR.Domain.Entities.User", b =>
@@ -606,7 +584,7 @@ namespace HKCR.Infra.Migrations
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("HKCR.Domain.Entities.Rental", "Rental")
+                    b.HasOne("HKCR.Domain.Entities.RentalRequest", "RentalRequest")
                         .WithMany()
                         .HasForeignKey("RentalId")
                         .OnDelete(DeleteBehavior.SetNull)
@@ -614,7 +592,7 @@ namespace HKCR.Infra.Migrations
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Rental");
+                    b.Navigation("RentalRequest");
                 });
 
             modelBuilder.Entity("HKCR.Domain.Entities.Payment", b =>
@@ -625,7 +603,7 @@ namespace HKCR.Infra.Migrations
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("HKCR.Domain.Entities.Rental", "Rental")
+                    b.HasOne("HKCR.Domain.Entities.RentalRequest", "RentalRequest")
                         .WithMany()
                         .HasForeignKey("RentalID")
                         .OnDelete(DeleteBehavior.SetNull)
@@ -633,34 +611,25 @@ namespace HKCR.Infra.Migrations
 
                     b.Navigation("Offers");
 
-                    b.Navigation("Rental");
+                    b.Navigation("RentalRequest");
                 });
 
-            modelBuilder.Entity("HKCR.Domain.Entities.Rental", b =>
+            modelBuilder.Entity("HKCR.Domain.Entities.RentalRequest", b =>
                 {
+                    b.HasOne("HKCR.Domain.Entities.AddUser", "AddUser")
+                        .WithMany("Rentals")
+                        .HasForeignKey("AddUserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
                     b.HasOne("HKCR.Domain.Entities.Cars", "Car")
-                        .WithMany()
+                        .WithMany("Rentals")
                         .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("HKCR.Domain.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.HasOne("HKCR.Domain.Entities.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffID")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                    b.Navigation("AddUser");
 
                     b.Navigation("Car");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("HKCR.Domain.Entities.User", b =>
@@ -721,6 +690,16 @@ namespace HKCR.Infra.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HKCR.Domain.Entities.AddUser", b =>
+                {
+                    b.Navigation("Rentals");
+                });
+
+            modelBuilder.Entity("HKCR.Domain.Entities.Cars", b =>
+                {
+                    b.Navigation("Rentals");
                 });
 
             modelBuilder.Entity("HKCR.Domain.Entities.Document", b =>

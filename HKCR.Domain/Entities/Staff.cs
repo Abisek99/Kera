@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace HKCR.Domain.Entities
 {
-    public class Staff
+    public class Staff : AddUser
     {
-        public Guid StaffID { get; set; } = new Guid();
-        public string StaffEmail { get; set; }
-        public string StaffPassword { get; set; }
+
     }
 }

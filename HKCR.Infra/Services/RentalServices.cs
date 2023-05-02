@@ -16,15 +16,11 @@ namespace HKCR.Infra.Services
 
         public async Task<RentalResponseDto> AddRentalDetails(RentalRequestDto rental)
         {
-            var rentalDetails = new Rental()
+            var rentalDetails = new RentalRequest()
             {
-                RentalDate = rental.RentalDate,
-                ReturnDate = rental.ReturnDate,
-                RentalStatus = rental.RentalStatus,
-                DamageStatus = rental.DamageStatus,
+                RentalRequestDate = DateTime.UtcNow,
                 CarID = rental.CarID,
-                StaffID = rental.StaffID,
-                CustomerID = rental.CustomerID
+                AddUserId = rental.UserID.ToString()
             };
 
             await _dbContext.Rental.AddAsync(rentalDetails);
@@ -32,13 +28,14 @@ namespace HKCR.Infra.Services
 
             var result = new RentalResponseDto()
             {
-                RentalDate = rentalDetails.RentalDate,
-                ReturnDate = rentalDetails.ReturnDate,
+                Status = "Success",
+                Message = "Rent Placed for Approval",
+                StatusCode = 201,
+                RentalRequestDate = rentalDetails.RentalRequestDate,
                 RentalStatus = rentalDetails.RentalStatus,
-                DamageStatus = rentalDetails.DamageStatus,
+                RentalId = rentalDetails.RentalId,
                 CarID = rentalDetails.CarID,
-                StaffID = rentalDetails.StaffID,
-                CustomerID = rentalDetails.CustomerID
+                UserId = rentalDetails.AddUserId
             };
             return result;
         }
@@ -51,7 +48,15 @@ namespace HKCR.Infra.Services
 
         public Task<List<RentalResponseDto>> GetAllRentalAsync()
         {
-            throw new NotImplementedException();
+            var data = (from rentalReqData in _dbContext.Rental
+                select new RentalResponseDto()
+                {
+                    RentalId = rentalReqData.RentalId,
+                    RentalRequestDate = rentalReqData.RentalRequestDate,
+                    RentalStatus = rentalReqData.RentalStatus,
+                    CarID = rentalReqData.CarID
+                }).ToList();
+            return Task.FromResult(data);
         }
     }
 }

@@ -14,4 +14,6 @@ public class AddUser : IdentityUser
 
     [ForeignKey("Document")] public Guid? DocId { get; set; }
     public virtual Document? Document { get; set; }
+    public ICollection<RentalRequest> Rentals { get; set; }
+    public ICollection<Rent> Rent { get; set; }
 }

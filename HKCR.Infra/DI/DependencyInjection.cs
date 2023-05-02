@@ -13,7 +13,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace HKCR.Infra.DI;
 
-
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services,
@@ -40,17 +39,18 @@ public static class DependencyInjection
                 options.Password.RequireLowercase = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
-        
-        
+
+
         services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
         services.AddScoped<UserManager<AddUser>, UserManager<AddUser>>();
-        
+
         services.AddTransient<IDateTime, DateTimeService>();
         services.AddTransient<IAuthentication, AuthenticationService>();
         services.AddTransient<ICarDetails, CarDetails>();
         services.AddTransient<IDocDetails, DocDetails>();
         services.AddTransient<IPaymentDetails, PaymentService>();
         services.AddTransient<IRentalDetails, RentalServices>();
+        services.AddTransient<IRentDetails, RentService>();
         services.AddTransient<IOffersDetails, OffersService>();
         services.AddTransient<IDamageRequestDetails, DamageRequestService>();
         // services.AddTransient<IUserDetails, UserDetails>();
