@@ -30,6 +30,7 @@ namespace HKCR.Infra.Services
                 RepairBill = damageRequestDetails.RepairBill,
                 AddUserId = damageRequestDetails.AddUserId,
                 RentalId = damageRequestDetails.RentalId,
+                DamagedBy = damageRequestDetails.DamagedBy
             };
 
             await _dbContext.DamageRequest.AddAsync(drs);
@@ -57,6 +58,8 @@ namespace HKCR.Infra.Services
         {
             var result = _dbContext.DamageRequest
                 .Include(d => d.RentalRequest)
+                .Include(d => d.AddUser)
+                .Include(d => d.RentalRequest.Car)
                 .Select(d => new DamageResDto()
                 {
                     DamageID = d.DamageId,
@@ -64,10 +67,26 @@ namespace HKCR.Infra.Services
                     DamageDate = d.DamageDate,
                     DamageStatus = d.DamageStatus,
                     RepairBill = d.RepairBill,
-                    AcceptedBy = d.AddUserId,
-                    DamagedBy = d.RentalRequest!.AddUserId,
+                    AcceptedBy = d.AddUser.Name, // Update to return name of user in AcceptedBy
+                    DamagedBy = d.RentalRequest.AddUser.Name, // Update to return name of user in DamagedBy
+                    CarName = d.RentalRequest.Car.CarName // Return car name from rental entity
                 }).ToList();
             return Task.FromResult(result);
+
+
+            // var result = _dbContext.DamageRequest
+            //     .Include(d => d.RentalRequest)
+            //     .Select(d => new DamageResDto()
+            //     {
+            //         DamageID = d.DamageId,
+            //         DamageDescription = d.DamageDescription,
+            //         DamageDate = d.DamageDate,
+            //         DamageStatus = d.DamageStatus,
+            //         RepairBill = d.RepairBill,
+            //         AcceptedBy = d.AddUserId,
+            //         DamagedBy = d.RentalRequest!.AddUserId,
+            //     }).ToList();
+            // return Task.FromResult(result);
         }
     }
 }

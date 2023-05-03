@@ -19,5 +19,6 @@ namespace HKCR.Application.Common.DTO.DamageRequest
 
         public string? DamagedBy { get; set; }
         public string? AcceptedBy { get; set; }
+        public string? CarName { get; set; }
     }
 }
